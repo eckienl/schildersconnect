@@ -1,6 +1,7 @@
 import 'server-only';
 import { db } from './supabase/admin';
 import { isConfigured } from './env';
+import { WELCOME_LIMIT } from './config';
 
 /** Public numbers only: never titles, addresses or descriptions of jobs. */
 export async function publicStats() {
@@ -19,4 +20,11 @@ export async function publicStats() {
   }
   const sort = (m: Map<string, number>) => [...m.entries()].sort((a, b) => b[1] - a[1]);
   return { openJobs: jobs?.length ?? 0, painters: painters ?? 0, cities: byCity.size, byType: sort(byType), byCity: sort(byCity).slice(0, 12) };
+}
+
+/** How many of the first WELCOME_LIMIT painters can still get welcome credits. */
+export async function welcomeLeft() {
+  if (!isConfigured) return WELCOME_LIMIT;
+  const { count } = await db().from('credit_transactions').select('id', { count: 'exact', head: true }).eq('reason', 'welkom').neq('note', 'Demo');
+  return Math.max(0, WELCOME_LIMIT - (count ?? 0));
 }

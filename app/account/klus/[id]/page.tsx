@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
 import { budgetLabel } from '@/lib/budget';
+import { stripContact } from '@/lib/sanitize';
 import { customerMenu } from '@/lib/menus';
 import { DashShell } from '@/app/components/DashShell';
 import { Icon } from '@/app/components/Icon';
@@ -89,6 +90,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                     )}
                   </div>
                   <p style={{ marginTop: 12, whiteSpace: 'pre-wrap' }}>{r.message}</p>
+                  {p?.description && <p className="small muted" style={{ whiteSpace: 'pre-wrap' }}>{chosen ? p.description : stripContact(p.description)}</p>}
                   {p?.specialties?.length > 0 && (
                     <div className="row" style={{ gap: 6, marginBottom: 12 }}>
                       {p.specialties.map((s: string) => <span key={s} className="badge">{s}</span>)}

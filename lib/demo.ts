@@ -64,7 +64,7 @@ const DEMO_JOBS = [
     estimate_low: 1000,
     estimate_high: 5000,
     size_class: 'middel',
-    match_cost: 25,
+    match_cost: 16,
   },
   {
     title: 'Kozijnen en voordeur buiten schilderen',
@@ -81,14 +81,14 @@ const DEMO_JOBS = [
     estimate_low: 1800,
     estimate_high: 1800,
     size_class: 'middel',
-    match_cost: 25,
+    match_cost: 16,
   },
 ];
 
 const OTHER_JOBS = [
-  { title: 'Slaapkamer latex spuiten', location_type: 'binnen', job_type: 'Latex spuitwerk', surface_m2: 50, city: 'Nieuwegein', postcode: '3431 EF', estimate_low: 0, estimate_high: 1000, size_class: 'klein', match_cost: 15, timing: 'Zo snel mogelijk' },
-  { title: 'Vrijstaande woning buitenschilderwerk', location_type: 'buiten', job_type: 'Buitengevel / houtwerk', surface_m2: 220, city: 'Utrecht', postcode: '3584 GH', estimate_low: 5000, estimate_high: 0, size_class: 'groot', match_cost: 40, timing: 'Flexibel / winterperiode' },
-  { title: 'Trap en trapgat schilderen', location_type: 'binnen', job_type: 'Trap en trapgat', surface_m2: 30, city: 'Amersfoort', postcode: '3811 JK', estimate_low: 0, estimate_high: 0, size_class: 'middel', match_cost: 25, timing: 'Binnen 1 maand' },
+  { title: 'Slaapkamer latex spuiten', location_type: 'binnen', job_type: 'Latex spuitwerk', surface_m2: 50, city: 'Nieuwegein', postcode: '3431 EF', estimate_low: 0, estimate_high: 1000, size_class: 'klein', match_cost: 6, timing: 'Zo snel mogelijk' },
+  { title: 'Vrijstaande woning buitenschilderwerk', location_type: 'buiten', job_type: 'Buitengevel / houtwerk', surface_m2: 220, city: 'Utrecht', postcode: '3584 GH', estimate_low: 5000, estimate_high: 0, size_class: 'groot', match_cost: 32, timing: 'Flexibel / winterperiode' },
+  { title: 'Trap en trapgat schilderen', location_type: 'binnen', job_type: 'Trap en trapgat', surface_m2: 30, city: 'Amersfoort', postcode: '3811 JK', estimate_low: 0, estimate_high: 0, size_class: 'middel', match_cost: 16, timing: 'Binnen 1 maand' },
 ];
 
 /** Creates the demo accounts and example data if they do not exist yet. */
@@ -140,7 +140,7 @@ export async function ensureDemo(reset = false) {
     await client.from('painters').update({ credits: 100, weekly_limit: null }).eq('id', ids.schilder);
     await client.from('painters').update({ credits: 0, status: 'pending' }).eq('id', ids.schilder_nieuw);
     await client.from('credit_transactions').insert([
-      { painter_id: ids.schilder, amount: 25, reason: 'welkom', note: 'Welkomstcredits' },
+      { painter_id: ids.schilder, amount: 25, reason: 'welkom', note: 'Demo' },
       { painter_id: ids.schilder, amount: 75, reason: 'correctie', note: 'Demotegoed' },
     ]);
 
@@ -158,7 +158,7 @@ export async function ensureDemo(reset = false) {
         price_indication: '€ 1.650 incl. btw',
       });
     }
-    await client.from('purchases').insert({ painter_id: ids.schilder, bundle: 'Plus', price_eur: 100, credits: 110 });
+    await client.from('purchases').insert({ painter_id: ids.schilder, bundle: 'Plus', price_eur: 11725, credits: 60 });
   }
   return ids;
 }

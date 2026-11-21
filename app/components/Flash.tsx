@@ -13,7 +13,7 @@ const MESSAGES: Record<string, { type: 'error' | 'success' | 'info'; text: strin
   gesloten: { type: 'success', text: 'De klus is gesloten. Er kunnen geen nieuwe reacties meer komen.' },
   // painter
   aangemeld: { type: 'success', text: 'Bedankt! Je aanmelding is in behandeling. We controleren je gegevens, meestal binnen 2 werkdagen.' },
-  gereageerd: { type: 'success', text: 'Je reactie is verstuurd. Je betaalt pas als de klant jou kiest.' },
+  gereageerd: { type: 'success', text: 'Je reactie is verstuurd. Je betaalt pas als de klant jou kiest. Een match is contact met de klant, geen gegarandeerde opdracht.' },
   te_weinig_credits: { type: 'error', text: 'Je hebt te weinig credits om op deze klus te reageren. Je betaalt pas bij een match, maar je saldo moet de matchprijs dekken.' },
   vol: { type: 'error', text: 'Op deze klus is al het maximum aantal reacties gegeven.' },
   al_gereageerd: { type: 'info', text: 'Je hebt al op deze klus gereageerd.' },
@@ -24,7 +24,8 @@ const MESSAGES: Record<string, { type: 'error' | 'success' | 'info'; text: strin
   bijgewerkt: { type: 'success', text: 'Je aanvraag is bijgewerkt.' },
   prijs_aangepast: { type: 'success', text: 'Matchprijs aangepast.' },
   // admin
-  goedgekeurd: { type: 'success', text: 'Schilder goedgekeurd en 25 welkomstcredits bijgeschreven.' },
+  goedgekeurd: { type: 'success', text: 'Schilder goedgekeurd. Welkomstcredits zijn bijgeschreven (eerste 50 schilders).' },
+  goedgekeurd_zonder_welkom: { type: 'success', text: 'Schilder goedgekeurd. De 50 welkomstplekken zijn vol, dus er zijn geen gratis credits bijgeschreven.' },
   teruggeboekt: { type: 'success', text: 'Match teruggeboekt.' },
   betaald: { type: 'success', text: 'Betaling bevestigd en credits bijgeschreven.' },
 };

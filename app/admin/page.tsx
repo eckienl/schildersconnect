@@ -4,6 +4,7 @@ import { getSession } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
 import { budgetLabel } from '@/lib/budget';
 import { adminMenu } from '@/lib/menus';
+import { MATCH_COST, eur } from '@/lib/config';
 import { DashShell } from '@/app/components/DashShell';
 import { Flash } from '@/app/components/Flash';
 import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, removeJob, setMatchCost, setPainterStatus } from './actions';
@@ -65,7 +66,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
               <div className="row" style={{ marginTop: 14, alignItems: 'flex-start' }}>
                 <form action={approvePainter}>
                   <input type="hidden" name="id" value={p.id} />
-                  <button className="btn btn-green">Goedkeuren (+25 credits)</button>
+                  <button className="btn btn-green">Goedkeuren</button>
                 </form>
                 <form action={setPainterStatus} className="row" style={{ flex: 1, minWidth: 280 }}>
                   <input type="hidden" name="id" value={p.id} />
@@ -101,9 +102,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                 <form action={setMatchCost} className="row" style={{ gap: 6, marginTop: 6 }}>
                   <input type="hidden" name="id" value={j.id} />
                   <select name="size" defaultValue={j.size_class} style={{ padding: '6px 8px', width: 'auto' }}>
-                    <option value="klein">Klein · 15 cr</option>
-                    <option value="middel">Middel · 25 cr</option>
-                    <option value="groot">Groot · 40 cr</option>
+                    <option value="klein">Klein · {MATCH_COST.klein} cr</option>
+                    <option value="middel">Middel · {MATCH_COST.middel} cr</option>
+                    <option value="groot">Groot · {MATCH_COST.groot} cr</option>
                   </select>
                   <button className="btn btn-ghost btn-sm">Opslaan</button>
                 </form>
@@ -135,7 +136,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
               <tr key={p.id}>
                 <td>{new Date(p.created_at).toLocaleDateString('nl-NL')}</td>
                 <td>{p.painters?.company_name}<div className="small muted">{p.painters?.profiles?.email}</div></td>
-                <td>{p.bundle} · € {p.price_eur} · {p.credits} credits</td>
+                <td>{p.bundle} · {eur(p.price_eur / 100)} excl. btw ({eur(Math.round(p.price_eur * 1.21) / 100)} incl.) · {p.credits} credits</td>
                 <td><span className={`badge ${p.status === 'paid' ? 'badge-green' : p.status === 'open' ? 'badge-orange' : ''}`}>{p.status}</span></td>
                 <td>
                   {p.status === 'open' && (

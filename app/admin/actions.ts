@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { db } from '@/lib/supabase/admin';
 import { getSession } from '@/lib/session';
 import { clean } from '@/lib/sanitize';
+import { MATCH_COST, WELCOME_CREDITS, WELCOME_LIMIT } from '@/lib/config';
 
 async function requireAdmin() {
   const { profile } = await getSession();
@@ -12,9 +13,18 @@ async function requireAdmin() {
 
 export async function approvePainter(formData: FormData) {
   await requireAdmin();
-  const { data } = await db().rpc('approve_painter', { p_painter: clean(formData.get('id'), 64) });
-  redirect(`/admin?m=${data === 'ok' ? 'goedgekeurd' : 'fout'}`);
+  const id = clean(formData.get('id'), 64);
+  const client = db();
+  // Welcome credits only for the first WELCOME_LIMIT painters (demo accounts excluded).
+  const { count } = await client.from('credit_transactions').select('id', { count: 'exact', head: true }).eq('reason', 'welkom').neq('note', 'Demo');
+  if ((count ?? 0) < WELCOME_LIMIT) {
+    const { data } = await client.rpc('approve_painter', { p_painter: id }); // grants WELCOME_CREDITS once
+    redirect(`/admin?m=${data === 'ok' ? 'goedgekeurd' : 'fout'}`);
+  }
+  await client.from('painters').update({ status: 'approved', approved_at: new Date().toISOString(), admin_note: '' }).eq('id', id);
+  redirect('/admin?m=goedgekeurd_zonder_welkom');
 }
+void WELCOME_CREDITS;
 
 export async function setPainterStatus(formData: FormData) {
   await requireAdmin();
@@ -54,7 +64,7 @@ export async function refundMatch(formData: FormData) {
 export async function setMatchCost(formData: FormData) {
   await requireAdmin();
   const size = clean(formData.get('size'), 10);
-  const costs: Record<string, number> = { klein: 15, middel: 25, groot: 40 };
+  const costs: Record<string, number> = { ...MATCH_COST };
   if (!(size in costs)) redirect('/admin?tab=klussen&m=fout');
   await db().from('jobs').update({ size_class: size, match_cost: costs[size] }).eq('id', clean(formData.get('id'), 64));
   redirect('/admin?tab=klussen&m=prijs_aangepast');

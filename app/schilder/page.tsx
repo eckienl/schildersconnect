@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { euro } from '@/lib/budget';
+import { CREDIT_PRICE_EX, eur } from '@/lib/config';
 import { painterMenu } from '@/lib/menus';
 import { Flash } from '@/app/components/Flash';
 import { DashShell } from '@/app/components/DashShell';
@@ -23,7 +23,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
       ['Account aangemaakt', true],
       ['Bedrijfsgegevens ingevuld', true],
       ['Controle door SchildersConnect', false],
-      ['Toegang tot opdrachten + 25 welkomstcredits', false],
+      ['Toegang tot opdrachten (eerste 50: 25 welkomstcredits)', false],
     ];
     return (
       <DashShell title="Schildersaccount" icon="roller" menu={menu} active="/schilder">
@@ -91,7 +91,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
       <div className="stack">
         <Flash code={sp.m} />
         <div className="grid grid-3">
-          <div className="stat"><div className="num">{painter.credits}</div><div className="lbl">Credits (= {euro(painter.credits)})</div></div>
+          <div className="stat"><div className="num">{painter.credits}</div><div className="lbl">Credits (waarde {eur(painter.credits * CREDIT_PRICE_EX)} excl. btw)</div></div>
           <div className="stat"><div className="num">{mine?.length ?? 0}</div><div className="lbl">Reacties verstuurd (gratis)</div></div>
           <div className="stat"><div className="num">{matches}</div><div className="lbl">Matches: klanten die jou kozen</div></div>
         </div>

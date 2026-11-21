@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { BUNDLES, WELCOME_CREDITS } from '@/lib/config';
-import { euro } from '@/lib/budget';
+import { BUNDLES, WELCOME_CREDITS, WELCOME_LIMIT, eur, exVat, inclVat } from '@/lib/config';
 
-export function Pricing() {
+export function Pricing({ welcomeLeft }: { welcomeLeft?: number }) {
   return (
     <div className="pricing">
       <div className="price-card">
@@ -11,7 +10,7 @@ export function Pricing() {
           <div className="amount">€ 0</div>
           <div className="per">na goedkeuring</div>
           <ul>
-            <li>{WELCOME_CREDITS} gratis credits</li>
+            <li>{WELCOME_CREDITS} gratis credits voor de eerste {WELCOME_LIMIT} schilders{typeof welcomeLeft === 'number' ? ` (nog ${welcomeLeft} plekken)` : ''}</li>
             <li>Bedrijfsprofiel</li>
             <li>Onbeperkt gratis reageren</li>
           </ul>
@@ -23,12 +22,13 @@ export function Pricing() {
           {i === 1 && <span className="ribbon">Meest gekozen</span>}
           <div className="ph">{b.name}</div>
           <div className="pb">
-            <div className="amount">{euro(b.priceEur)}</div>
-            <div className="per">eenmalig · {b.credits} credits</div>
+            <div className="amount" style={{ fontSize: '1.9rem' }}>{eur(exVat(b.priceCents))}</div>
+            <div className="per">excl. btw · {eur(inclVat(b.priceCents))} incl. btw</div>
             <ul>
-              <li>{b.credits} credits{b.bonus ? ` (${b.bonus} bonus)` : ''}</li>
+              <li>{b.credits} credits ({eur(exVat(b.priceCents) / b.credits)} per credit)</li>
+              {b.discount && <li>{b.discount} op de creditprijs</li>}
               <li>Vervallen nooit</li>
-              <li>Credits terug bij een nepklant</li>
+              <li>Terug bij nep- of onbereikbare klant</li>
             </ul>
             <Link href="/registreren?rol=schilder" className={`btn btn-block ${i === 2 ? 'btn-navy' : i === 1 ? '' : 'btn-ghost'}`}>Kies {b.name}</Link>
           </div>

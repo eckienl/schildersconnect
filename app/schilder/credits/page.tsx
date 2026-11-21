@@ -2,8 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { BUNDLES, MATCH_COST } from '@/lib/config';
-import { euro } from '@/lib/budget';
+import { BUNDLES, MATCH_COST, eur, exVat, inclVat, matchPriceEx } from '@/lib/config';
 import { Flash } from '@/app/components/Flash';
 import { DashShell } from '@/app/components/DashShell';
 import { Icon } from '@/app/components/Icon';
@@ -30,7 +29,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
         <div className="dash-head">
           <div>
             <h1>Credits</h1>
-            <p className="muted" style={{ margin: 0 }}>Geen abonnement. Credits vervallen nooit. 1 credit = € 1.</p>
+            <p className="muted" style={{ margin: 0 }}>Geen abonnement. Credits vervallen nooit. Alle prijzen excl. btw.</p>
           </div>
           <div className="stat" style={{ minWidth: 180 }}><div className="num">{painter.credits}</div><div className="lbl">Huidig saldo</div></div>
         </div>
@@ -42,19 +41,21 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
               <form key={b.id} action={requestBundle} className="card center">
                 <input type="hidden" name="bundle" value={b.id} />
                 <div className="muted">{b.name}</div>
-                <div className="price">{euro(b.priceEur)}</div>
-                <div>{b.credits} credits {b.bonus && <span className="badge badge-orange">{b.bonus}</span>}</div>
+                <div className="price">{eur(exVat(b.priceCents))}</div>
+                <div className="small muted">excl. btw · {eur(inclVat(b.priceCents))} incl. btw</div>
+                <div style={{ marginTop: 6 }}>{b.credits} credits {b.discount && <span className="badge badge-orange">{b.discount}</span>}</div>
                 <button className="btn" style={{ marginTop: 14, width: '100%' }}>Kies {b.name}</button>
               </form>
             ))}
           </div>
           <p className="small muted">
-            Een match kost {MATCH_COST.klein} (klein), {MATCH_COST.middel} (middel) of {MATCH_COST.groot} (groot) credits. Na je keuze
-            sturen we een betaalverzoek; na betaling staan de credits direct op je account.
+            Een match kost {MATCH_COST.klein} credits ({eur(matchPriceEx(MATCH_COST.klein))}), {MATCH_COST.middel} credits ({eur(matchPriceEx(MATCH_COST.middel))}) of {MATCH_COST.groot} credits ({eur(matchPriceEx(MATCH_COST.groot))}), excl. btw.
+            Een match geeft je contact met de klant; SchildersConnect kan niet garanderen dat je de opdracht krijgt. Na je keuze sturen we
+            een betaalverzoek; na betaling staan de credits direct op je account.
           </p>
           {open && open.length > 0 && (
             <div className="alert alert-info">
-              Openstaande aanvraag: {open.map((p: any) => `${p.bundle} (${euro(p.price_eur)})`).join(', ')}. We sturen je een betaalverzoek.
+              Openstaande aanvraag: {open.map((p: any) => `${p.bundle} (${eur(p.price_eur / 100)} excl. btw)`).join(', ')}. We sturen je een betaalverzoek.
             </div>
           )}
 

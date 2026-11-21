@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { publicStats } from '@/lib/stats';
-import { MATCH_COST } from '@/lib/config';
+import { MATCH_COST, eur, matchPriceEx } from '@/lib/config';
+import { welcomeLeft } from '@/lib/stats';
 import { Pricing } from './components/Pricing';
 import { Icon } from './components/Icon';
 import { Flash } from './components/Flash';
@@ -172,9 +173,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
             </div>
             <Link href="/voor-schilders" className="link-arrow">Zo werkt het voor schilders <Icon name="arrow" size={18} /></Link>
           </div>
-          <Pricing />
+          <Pricing welcomeLeft={await welcomeLeft()} />
           <p className="small muted center" style={{ marginTop: 14 }}>
-            1 credit = € 1. Een match kost {MATCH_COST.klein} credits (klus tot € 1.000), {MATCH_COST.middel} credits (€ 1.000–5.000) of {MATCH_COST.groot} credits (boven € 5.000).
+            Alle prijzen excl. btw. Een match kost {MATCH_COST.klein} credits ({eur(matchPriceEx(MATCH_COST.klein))}) bij een klus tot € 1.000, {MATCH_COST.middel} credits ({eur(matchPriceEx(MATCH_COST.middel))}) bij € 1.000–5.000 en {MATCH_COST.groot} credits ({eur(matchPriceEx(MATCH_COST.groot))}) boven € 5.000. Een match betekent contact met de klant, geen gegarandeerde opdracht.
           </p>
         </div>
       </section>

@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
 import { budgetLabel } from '@/lib/budget';
+import { eur, matchPriceEx } from '@/lib/config';
 import { Flash } from '@/app/components/Flash';
 import { DashShell } from '@/app/components/DashShell';
 import { Icon } from '@/app/components/Icon';
@@ -34,7 +35,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           <div style={{ textAlign: 'right' }}>
             <div className="small muted">{budgetLabel(job).startsWith('Richtprijs') ? 'Richtprijs klant' : 'Budget klant'}</div>
             <strong>{budgetLabel(job).replace(/^(Budget|Richtprijs klant): /, '')}</strong>
-            <div className="small muted">Matchprijs: {job.match_cost} credits</div>
+            <div className="small muted">Matchprijs: {job.match_cost} credits ({eur(matchPriceEx(job.match_cost))} excl. btw)</div>
           </div>
         </div>
         <div className="stack">
@@ -66,7 +67,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
               <h3>Reageer gratis</h3>
               <p className="small muted">
                 Kiest de klant jou, dan worden er <strong>{job.match_cost} credits</strong> afgeschreven en krijgen jullie elkaars
-                contactgegevens. Telefoonnummers, e-mailadressen en links worden uit je bericht gefilterd.
+                contactgegevens. Een match is contact met de klant, geen gegarandeerde opdracht. Telefoonnummers, e-mailadressen en links worden uit je bericht gefilterd; contact buiten het platform om vóór een match is niet toegestaan.
               </p>
               {!enough && (
                 <div className="alert alert-warn" style={{ marginBottom: 12 }}>

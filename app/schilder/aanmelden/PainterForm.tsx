@@ -60,7 +60,7 @@ export function PainterForm({ painter }: { painter: any }) {
       </label>
       <label className="checkbox">
         <input type="checkbox" name="truth" />
-        <span>Mijn gegevens kloppen. SchildersConnect mag ze controleren (KvK, verzekering, portfolio).</span>
+        <span>Mijn gegevens kloppen en SchildersConnect mag ze controleren (KvK, verzekering, portfolio). Ik begrijp dat een match contact met een klant geeft maar geen gegarandeerde opdracht, en dat ik vóór een match geen contact buiten het platform om zoek.</span>
       </label>
       <button className="btn btn-lg" disabled={pending}>{pending ? 'Bezig…' : painter?.status === 'approved' ? 'Opslaan' : 'Aanmelding versturen'}</button>
     </form>

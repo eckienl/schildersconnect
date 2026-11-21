@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { publicStats } from '@/lib/stats';
-import { MATCH_COST, WELCOME_CREDITS } from '@/lib/config';
+import { MATCH_COST, WELCOME_CREDITS, WELCOME_LIMIT, eur, matchPriceEx } from '@/lib/config';
+import { welcomeLeft } from '@/lib/stats';
 import { Icon } from '../components/Icon';
 import { Pricing } from '../components/Pricing';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const stats = await publicStats();
+  const [stats, left] = await Promise.all([publicStats(), welcomeLeft()]);
   return (
     <>
       <section className="hero">
@@ -31,7 +32,7 @@ export default async function Page() {
           <div className="grid grid-4">
             {[
               ['user', 'Aanmelden', 'Account aanmaken en je bedrijfsgegevens invullen: KvK, verzekering, werkgebied.'],
-              ['shield', 'Wij screenen', `Binnen 2 werkdagen gecontroleerd. Na goedkeuring krijg je ${WELCOME_CREDITS} gratis credits.`],
+              ['shield', 'Wij screenen', `Binnen 2 werkdagen gecontroleerd. De eerste ${WELCOME_LIMIT} schilders krijgen ${WELCOME_CREDITS} gratis credits (nog ${left} plekken).`],
               ['chat', 'Gratis reageren', 'Reageer op opdrachten met een bericht en prijsindicatie. Zoveel als je wilt.'],
               ['handshake', 'Match', 'Kiest de klant jou? Dan gaan er credits af en krijg je direct zijn contactgegevens.'],
             ].map(([icon, title, text], i) => (
@@ -63,14 +64,15 @@ export default async function Page() {
               <div key={name as string} className="card center">
                 <div className="muted small">{name} · {range}</div>
                 <div style={{ fontSize: '2rem', fontWeight: 800 }}>{cost} credits</div>
-                <div className="muted small">= € {cost} per match</div>
+                <div className="muted small">= {eur(matchPriceEx(cost as number))} excl. btw per match</div>
               </div>
             ))}
           </div>
-          <Pricing />
+          <Pricing welcomeLeft={left} />
           <p className="small muted center" style={{ marginTop: 16 }}>
-            Klopt de opdracht achteraf niet met het opgegeven budget, of is de klant onbereikbaar? Meld het, dan corrigeren of
-            storten we je credits terug.
+            Een match betekent dat je de contactgegevens van de klant krijgt. Of je de opdracht krijgt, hangt af van jouw offerte en het
+            gesprek met de klant; dat kan SchildersConnect niet garanderen. Credits krijg je terug als de klant nep of onbereikbaar
+            blijkt, of als de opdracht duidelijk niet klopt met het opgegeven budget.
           </p>
         </div>
       </section>

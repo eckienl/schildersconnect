@@ -75,7 +75,7 @@ export async function requestBundle(formData: FormData) {
   if (!painter || painter.status !== 'approved') redirect('/schilder');
   const bundle = BUNDLES.find((b) => b.id === formData.get('bundle'));
   if (!bundle) redirect('/schilder/credits?m=fout');
-  await db().from('purchases').insert({ painter_id: painter.id, bundle: bundle.name, price_eur: bundle.priceEur, credits: bundle.credits });
+  await db().from('purchases').insert({ painter_id: painter.id, bundle: bundle.name, price_eur: bundle.priceCents /* cents excl. btw */, credits: bundle.credits });
   redirect('/schilder/credits?m=aankoop_aangevraagd');
 }
 
