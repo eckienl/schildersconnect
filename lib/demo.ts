@@ -40,7 +40,7 @@ async function ensureUser(key: DemoRole): Promise<string> {
     if (!id) {
       // Auth user exists but profile is missing: look it up.
       const { data: list } = await client.auth.admin.listUsers({ perPage: 200 });
-      id = list.users.find((x) => x.email === u.email)?.id;
+      id = ((list as any)?.users ?? []).find((x: any) => x.email === u.email)?.id;
     }
   }
   if (!id) throw new Error('Demo-account kon niet worden aangemaakt');
