@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { redirect } from 'next/navigation';
 import { isConfigured } from './env';
 import { createAuthClient } from './supabase/server';
@@ -29,7 +30,7 @@ export type Painter = {
   weekly_limit: number | null;
 };
 
-export async function getSession(): Promise<{ profile: Profile | null; painter: Painter | null }> {
+export const getSession = cache(async (): Promise<{ profile: Profile | null; painter: Painter | null }> => {
   if (!isConfigured) return { profile: null, painter: null };
   const supabase = await createAuthClient();
   const { data } = await supabase.auth.getUser();
@@ -54,7 +55,7 @@ export async function getSession(): Promise<{ profile: Profile | null; painter: 
     painter = p as Painter | null;
   }
   return { profile: profile as Profile | null, painter };
-}
+});
 
 export async function requireProfile(next: string, role?: Profile['role']) {
   const s = await getSession();

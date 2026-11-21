@@ -14,7 +14,7 @@ export async function Header() {
           <Link href="/#voor-schilders" className="hide-sm">Voor schilders</Link>
           {profile ? (
             <>
-              <Link href={homeFor(profile.role)}>Mijn dashboard</Link>
+              <Link href={homeFor(profile.role)}>Dashboard</Link>
               <form action={signOut}>
                 <button className="btn btn-outline btn-sm" type="submit">Uitloggen</button>
               </form>
@@ -22,7 +22,7 @@ export async function Header() {
           ) : (
             <>
               <Link href="/inloggen">Inloggen</Link>
-              <Link href="/klus-plaatsen" className="btn btn-sm">Klus plaatsen</Link>
+              <Link href="/klus-plaatsen" className="btn btn-sm hide-xs">Klus plaatsen</Link>
             </>
           )}
         </nav>
