@@ -5,6 +5,8 @@ import { Footer } from './components/Footer';
 import { SetupNotice } from './components/SetupNotice';
 import { isConfigured } from '@/lib/env';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'SchildersConnect – vind de juiste schilder voor jouw schilderwerk',
   description:
