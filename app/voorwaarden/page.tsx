@@ -44,7 +44,7 @@ export default function Page() {
       <ol>
         <li>Credits koop je vooraf in bundels. Alle genoemde prijzen zijn exclusief 21% btw. Je ontvangt een factuur.</li>
         <li>Credits vervallen niet en zijn niet inwisselbaar voor geld, behalve waar de wet dat vereist.</li>
-        <li>Stopt SchildersConnect met het platform, of beëindigen wij je account zonder dat jij iets verkeerd hebt gedaan, dan betalen we de gekochte credits die je nog niet hebt gebruikt terug.</li>
+        <li>Stopt SchildersConnect met het platform, dan melden we dat minstens 3 maanden vooraf. In die periode kun je je credits gewoon blijven gebruiken. Gekochte credits die daarna nog over zijn, betalen we terug. Hetzelfde geldt als wij je account beëindigen zonder dat jij iets verkeerd hebt gedaan. Welkomstcredits worden niet terugbetaald.</li>
         <li>De eerste {WELCOME_LIMIT} goedgekeurde schilders ontvangen eenmalig {WELCOME_CREDITS} gratis welkomstcredits. Deze zijn niet inwisselbaar voor geld.</li>
         <li>SchildersConnect mag prijzen aanpassen, ook het aantal credits per match. Dat melden we minstens 15 dagen vooraf per e-mail. De matchprijs van een opdracht staat vast op het moment dat je reageert.</li>
       </ol>
