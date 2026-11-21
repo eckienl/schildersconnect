@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { budgetLabel } from '@/lib/budget';
-import { eur, matchPriceEx } from '@/lib/config';
+import { budgetLabel, euro, sizeForJob } from '@/lib/budget';
+import { CREDIT_PRICE_EX, eur, matchPriceEx } from '@/lib/config';
 import { Flash } from '@/app/components/Flash';
 import { DashShell } from '@/app/components/DashShell';
 import { Icon } from '@/app/components/Icon';
@@ -41,6 +41,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
         <div className="stack">
           <Flash code={m} />
           <div className="card"><JobDetails job={job} showFullPostcode={mine?.status === 'chosen'} /></div>
+          <MatchPriceExplainer job={job} />
 
           {mine ? (
             <div className="card">
@@ -123,5 +124,20 @@ export default async function Page({ params, searchParams }: { params: Promise<{
           )}
         </div>
     </DashShell>
+  );
+}
+
+function MatchPriceExplainer({ job }: { job: any }) {
+  const s = sizeForJob(job);
+  const label = { klein: 'klein (tot € 1.000)', middel: 'middel (€ 1.000 – € 5.000)', groot: 'groot (boven € 5.000)' }[job.size_class as 'klein' | 'middel' | 'groot'];
+  return (
+    <div className="card-flat small">
+      <strong>Waarom {job.match_cost} credits ({eur(matchPriceEx(job.match_cost))} excl. btw)?</strong>
+      <p className="muted" style={{ margin: '6px 0 0' }}>
+        Op basis van de opdracht ({job.job_type.toLowerCase()}, ca. {job.surface_m2} m²{job.condition && job.condition !== 'Weet ik niet' ? `, ${job.condition.toLowerCase()}` : ''}) schatten wij de klus op ongeveer {euro(s.estimate)}.
+        {' '}{budgetLabel(job)}. De hoogste van de twee bepaalt de klusgrootte: <strong>{label}</strong>.
+        {' '}1 credit kost {eur(CREDIT_PRICE_EX)} excl. btw (minder bij grotere bundels). Klopt de opdracht achteraf niet? Meld het na de match, dan corrigeren we de prijs.
+      </p>
+    </div>
   );
 }

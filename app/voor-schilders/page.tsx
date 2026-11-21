@@ -52,8 +52,9 @@ export default async function Page() {
         <div className="container">
           <h2 className="center">Wat kost een match?</h2>
           <p className="center muted" style={{ maxWidth: 680, margin: '0 auto 28px' }}>
-            De klant geeft bij zijn opdracht een budget of richtprijs op. Daarop is de matchprijs gebaseerd. Die zie je vóórdat je
-            reageert, zodat je nooit voor verrassingen staat.
+            De klant betaalt niets en bepaalt de prijs niet. Wij bepalen de klusgrootte op basis van de opdracht zelf: soort werk,
+            aantal m², binnen of buiten, staat van het werk en steiger. Geeft de klant een hoger budget op, dan telt dat. De matchprijs
+            zie je bij elke opdracht vóórdat je reageert, in credits én in euro's, met de uitleg erbij.
           </p>
           <div className="grid grid-3" style={{ maxWidth: 900, margin: '0 auto 36px' }}>
             {[

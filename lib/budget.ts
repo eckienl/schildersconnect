@@ -50,3 +50,49 @@ export function budgetLabel(job: { estimate_low: number; estimate_high: number }
   if (low === 0) return `Budget: tot ${euro(high)}`;
   return `Budget: ${euro(low)} – ${euro(high)}`;
 }
+
+/**
+ * Objective job size, so the match price cannot be gamed by the customer's budget choice.
+ * Indicative labour+material rates per m2 (market averages for painting work in NL).
+ */
+const RATE_PER_M2: Record<string, number> = {
+  'Muren en plafonds': 13,
+  'Latex spuitwerk': 8,
+  'Kozijnen en deuren': 35,
+  'Buitengevel / houtwerk': 38,
+  'Trap en trapgat': 30,
+  'Behang en glasvlies': 18,
+  'Compleet huis': 20,
+  'Zakelijk / bedrijfspand': 20,
+  Overig: 20,
+};
+const CONDITION_FACTOR: Record<string, number> = {
+  'Bladdert of scheurt hier en daar': 1.15,
+  'Slecht, veel voorbereiding nodig': 1.3,
+};
+
+export function estimatedValue(job: { job_type: string; surface_m2: number; condition?: string; scaffold_needed?: string; location_type?: string }) {
+  const rate = RATE_PER_M2[job.job_type] ?? 20;
+  let value = rate * (job.surface_m2 || 0) * (CONDITION_FACTOR[job.condition ?? ''] ?? 1);
+  if (job.scaffold_needed === 'ja') value *= 1.2;
+  return Math.round(value);
+}
+
+const ORDER: SizeClass[] = ['klein', 'middel', 'groot'];
+
+/**
+ * Final size class = the higher of (a) the estimate from the job details and (b) the customer's budget.
+ * A low budget can never make a big job cheap; a high budget can make it more expensive.
+ */
+export function sizeForJob(job: { job_type: string; surface_m2: number; condition?: string; scaffold_needed?: string; estimate_low: number; estimate_high: number }) {
+  const est = estimatedValue(job);
+  const fromEstimate = sizeForAmount(est);
+  let fromBudget: SizeClass = 'klein';
+  const { estimate_low: low, estimate_high: high } = job;
+  if (low > 0 && low === high) fromBudget = sizeForAmount(low);
+  else if (high === 0 && low >= 5000) fromBudget = 'groot';
+  else if (low >= 1000) fromBudget = 'middel';
+  const size = ORDER[Math.max(ORDER.indexOf(fromEstimate), ORDER.indexOf(fromBudget))];
+  const basis = ORDER.indexOf(fromBudget) > ORDER.indexOf(fromEstimate) ? 'budget' : 'opdracht';
+  return { size, matchCost: MATCH_COST[size], estimate: est, basis: basis as 'budget' | 'opdracht' };
+}

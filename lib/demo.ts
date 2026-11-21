@@ -88,7 +88,7 @@ const DEMO_JOBS = [
 const OTHER_JOBS = [
   { title: 'Slaapkamer latex spuiten', location_type: 'binnen', job_type: 'Latex spuitwerk', surface_m2: 50, city: 'Nieuwegein', postcode: '3431 EF', estimate_low: 0, estimate_high: 1000, size_class: 'klein', match_cost: 7, timing: 'Zo snel mogelijk' },
   { title: 'Vrijstaande woning buitenschilderwerk', location_type: 'buiten', job_type: 'Buitengevel / houtwerk', surface_m2: 220, city: 'Utrecht', postcode: '3584 GH', estimate_low: 5000, estimate_high: 0, size_class: 'groot', match_cost: 22, timing: 'Flexibel / winterperiode' },
-  { title: 'Trap en trapgat schilderen', location_type: 'binnen', job_type: 'Trap en trapgat', surface_m2: 30, city: 'Amersfoort', postcode: '3811 JK', estimate_low: 0, estimate_high: 0, size_class: 'middel', match_cost: 12, timing: 'Binnen 1 maand' },
+  { title: 'Trap en trapgat schilderen', location_type: 'binnen', job_type: 'Trap en trapgat', surface_m2: 30, city: 'Amersfoort', postcode: '3811 JK', estimate_low: 0, estimate_high: 0, size_class: 'klein', match_cost: 7, timing: 'Binnen 1 maand' },
 ];
 
 /** Creates the demo accounts and example data if they do not exist yet. */

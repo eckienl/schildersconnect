@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { budgetLabel } from '@/lib/budget';
+import { eur, matchPriceEx } from '@/lib/config';
 import { shortPostcode } from '@/lib/sanitize';
 import { Icon } from '@/app/components/Icon';
 
@@ -20,7 +21,7 @@ export function JobRow({ job: j }: { job: any }) {
       <div className="row">
         <span className="badge">{j.responses?.[0]?.count ?? 0} reacties</span>
         <span className="badge">{budgetLabel(j).replace(/^Budget: /, '')}</span>
-        <span className="badge badge-orange">Match: {j.match_cost} credits</span>
+        <span className="badge badge-orange">Match: {j.match_cost} credits · {eur(matchPriceEx(j.match_cost))}</span>
       </div>
     </Link>
   );

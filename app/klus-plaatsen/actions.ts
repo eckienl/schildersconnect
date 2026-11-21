@@ -6,7 +6,7 @@ import { db } from '@/lib/supabase/admin';
 import { createAuthClient } from '@/lib/supabase/server';
 import { getSession } from '@/lib/session';
 import { clean } from '@/lib/sanitize';
-import { resolveBudget } from '@/lib/budget';
+import { resolveBudget, sizeForJob } from '@/lib/budget';
 import { JOB_TYPES } from '@/lib/config';
 
 type Result = { error?: string };
@@ -25,6 +25,10 @@ function parseJob(fd: FormData): { error?: string; row?: Record<string, any> } {
   if (!/^\d{4}[A-Z]{2}$/.test(postcode)) return { error: 'Vul een geldige postcode in, bijvoorbeeld 3991 AB.' };
   if (!city) return { error: 'Vul je woonplaats in.' };
   const b = resolveBudget(clean(fd.get('budget'), 20), Math.round(Number(fd.get('own_amount')) || 0));
+  const condition = clean(fd.get('condition'), 80);
+  const scaffold = location === 'binnen' ? 'nee' : clean(fd.get('scaffold_needed'), 20) || 'weet niet';
+  // The match price follows the job itself; the customer's budget only counts when it is higher.
+  const sized = sizeForJob({ job_type, surface_m2: m2, condition, scaffold_needed: scaffold, estimate_low: b.low, estimate_high: b.high });
   return {
     row: {
       title,
@@ -32,16 +36,16 @@ function parseJob(fd: FormData): { error?: string; row?: Record<string, any> } {
       job_type,
       surface_m2: m2,
       substrate: clean(fd.get('substrate'), 60),
-      condition: clean(fd.get('condition'), 80),
-      scaffold_needed: location === 'binnen' ? 'nee' : clean(fd.get('scaffold_needed'), 20) || 'weet niet',
+      condition,
+      scaffold_needed: scaffold,
       description: clean(fd.get('description'), 3000),
       postcode: postcode.replace(/^(\d{4})([A-Z]{2})$/, '$1 $2'),
       city,
       timing: clean(fd.get('timing'), 60),
       estimate_low: b.low,
       estimate_high: b.high,
-      size_class: b.size,
-      match_cost: b.matchCost,
+      size_class: sized.size,
+      match_cost: sized.matchCost,
     },
   };
 }
