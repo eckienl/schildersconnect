@@ -7,7 +7,7 @@ export function Footer() {
       <div className="container footer-grid">
         <div>
           <Logo />
-          <p style={{ marginTop: 14, maxWidth: 320 }}>Hét platform voor schilderwerk. Gestart in de provincie Utrecht, straks landelijk.</p>
+          <p style={{ marginTop: 14, maxWidth: 320 }}>Hét platform voor schilderwerk, door heel Nederland.</p>
         </div>
         <div>
           <h4>Particulieren</h4>
@@ -19,6 +19,7 @@ export function Footer() {
           <h4>Schilders</h4>
           <Link href="/voor-schilders">Voor schilders</Link>
           <Link href="/opdrachten">Opdrachten</Link>
+          <Link href="/schilders">Schilders per plaats</Link>
           <Link href="/registreren?rol=schilder">Aanmelden</Link>
         </div>
         <div>

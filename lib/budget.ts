@@ -55,7 +55,7 @@ export function budgetLabel(job: { estimate_low: number; estimate_high: number }
  * Objective job size, so the match price cannot be gamed by the customer's budget choice.
  * Indicative labour+material rates per m2 (market averages for painting work in NL).
  */
-const RATE_PER_M2: Record<string, number> = {
+export const RATE_PER_M2: Record<string, number> = {
   'Muren en plafonds': 13,
   'Latex spuitwerk': 8,
   'Kozijnen en deuren': 35,

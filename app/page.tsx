@@ -49,7 +49,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
               <li>Geverifieerde schilders</li>
               <li>Vergelijk reacties</li>
               <li>Echte beoordelingen</li>
-              <li>Jij kiest wie je belt</li>
+              <li>Landelijke dekking</li>
             </ul>
           </div>
           <div className="hero-photo">
@@ -63,7 +63,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
           {[
             ['house', 'Particulier & Zakelijk', 'Voor woning, VvE, bedrijfspand en meer'],
             ['roller', 'Alleen Schilders', 'Gespecialiseerd in schilderwerk'],
-            ['pin', 'In jouw regio', 'Start in Utrecht, landelijk verder'],
+            ['pin', 'Door heel Nederland', 'Schilders in alle 12 provincies'],
             ['shield', 'Betrouwbaar', 'Gescreende bedrijven en echte reviews'],
             ['handshake', 'Snel & Eenvoudig', 'Plaats een opdracht, ontvang reacties'],
           ].map(([icon, title, text]) => (
@@ -152,15 +152,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ d
 
       <section className="utrecht">
         <div className="utrecht-grid">
-          <div className="utrecht-photo"><img src="/img/utrecht.jpg" alt="De Domtoren in Utrecht" /></div>
+          <div className="utrecht-photo"><img src="/img/utrecht.jpg" alt="Nederlandse huizen en een kerktoren" /></div>
           <div className="utrecht-text">
             <span style={{ color: 'var(--orange)' }}><Icon name="pin" size={44} /></span>
             <div>
-              <h2>Nu gestart in de provincie <span className="accent">Utrecht</span></h2>
-              <p style={{ margin: 0, opacity: 0.9 }}>Voor particulieren, bedrijven en schilders in de regio Utrecht. Daarna rollen we provincie voor provincie uit.</p>
+              <h2>Schilders in <span className="accent">heel Nederland</span></h2>
+              <p style={{ margin: '0 0 12px', opacity: 0.9 }}>Van Groningen tot Maastricht: voor particulieren, bedrijven en schilders in alle 12 provincies.</p>
+              <Link href="/schilders" className="link-arrow">Vind een schilder in jouw plaats <Icon name="arrow" size={16} /></Link>
             </div>
           </div>
-          <div className="utrecht-map"><img src="/img/utrecht-kaart.jpg" alt="" /></div>
+          <div className="utrecht-map"><div className="chips">{['Groningen','Friesland','Drenthe','Overijssel','Flevoland','Gelderland','Utrecht','Noord-Holland','Zuid-Holland','Zeeland','Noord-Brabant','Limburg'].map((p) => <span key={p} className="chip" style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.2)', color: '#fff' }}>{p}</span>)}</div></div>
         </div>
       </section>
 

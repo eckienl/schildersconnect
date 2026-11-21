@@ -19,7 +19,7 @@ export default async function Page() {
           </h1>
           <p className="lead" style={{ maxWidth: 640, opacity: 0.9 }}>
             Geen abonnement, geen vaste maandlasten en geen dure leads die nergens op uitlopen. Nu {stats.openJobs} open
-            opdrachten in de regio Utrecht.
+            opdrachten in Nederland.
           </p>
           <div className="row" style={{ marginTop: 22 }}>
             <Link href="/registreren?rol=schilder" className="btn btn-lg">Gratis aanmelden</Link>
