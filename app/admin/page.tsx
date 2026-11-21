@@ -6,6 +6,7 @@ import { budgetLabel } from '@/lib/budget';
 import { adminMenu } from '@/lib/menus';
 import { MATCH_COST, SIZE_CLASSES, eur } from '@/lib/config';
 import { DashShell } from '@/app/components/DashShell';
+import { outstandingPaidCredits } from '@/lib/liability';
 import { Flash } from '@/app/components/Flash';
 import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, rejectReport, removeJob, setMatchCost, setPainterStatus } from './actions';
 
@@ -31,6 +32,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
     client.from('purchases').select('id', { count: 'exact', head: true }).eq('status', 'open'),
     client.from('jobs').select('id', { count: 'exact', head: true }).eq('status', 'open'),
   ]);
+  const owed = await outstandingPaidCredits();
 
   let content: React.ReactNode = null;
 
@@ -208,6 +210,16 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
           <div className="stat"><div className="num">{pendingCount ?? 0}</div><div className="lbl">Schilders wachten op controle</div></div>
           <div className="stat"><div className="num">{openJobs ?? 0}</div><div className="lbl">Open opdrachten</div></div>
           <div className="stat"><div className="num">{openPurchases ?? 0}</div><div className="lbl">Openstaande aankopen</div></div>
+        </div>
+        <div className="stat" style={{ marginTop: 16 }}>
+          <div className="row between" style={{ alignItems: 'baseline', flexWrap: 'wrap', gap: 8 }}>
+            <div className="lbl">Openstaande gekochte credits (apart houden)</div>
+            <div className="num">{eur(owed.exVat)} <span className="muted small" style={{ fontWeight: 400 }}>excl. btw · {eur(owed.inclVat)} incl. btw</span></div>
+          </div>
+          <p className="muted small" style={{ margin: '6px 0 0' }}>
+            {owed.credits} ongebruikte gekochte credits bij {owed.painters} {owed.painters === 1 ? 'schilder' : 'schilders'}, tegen de prijs die ze ervoor
+            betaalden. Dit is het maximum dat je zou moeten terugbetalen als je stopt. Welkomstcredits en demo-accounts tellen niet mee.
+          </p>
         </div>
         <div className="table-wrap">{content}</div>
       </div>
