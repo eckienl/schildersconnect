@@ -23,6 +23,10 @@ const MESSAGES: Record<string, { type: 'error' | 'success' | 'info'; text: strin
   demo_fout: { type: 'error', text: 'Inloggen op het demo-account lukte niet. Probeer het opnieuw.' },
   bijgewerkt: { type: 'success', text: 'Je aanvraag is bijgewerkt.' },
   prijs_aangepast: { type: 'success', text: 'Matchprijs aangepast.' },
+  betaling_fout: { type: 'error', text: 'De betaling kon niet worden gestart. Probeer het opnieuw of neem contact met ons op.' },
+  betaald_ideal: { type: 'success', text: 'Betaling ontvangen! Je credits staan op je account en je factuur staat hieronder.' },
+  betaling_mislukt: { type: 'error', text: 'De betaling is geannuleerd of mislukt. Er is niets afgeschreven.' },
+  gemeld: { type: 'success', text: 'Je melding is ontvangen. We beoordelen hem binnen 2 werkdagen en laten je weten of we de credits terugboeken.' },
   // admin
   goedgekeurd: { type: 'success', text: 'Schilder goedgekeurd. Welkomstcredits zijn bijgeschreven (eerste 50 schilders).' },
   goedgekeurd_zonder_welkom: { type: 'success', text: 'Schilder goedgekeurd. De 50 welkomstplekken zijn vol, dus er zijn geen gratis credits bijgeschreven.' },

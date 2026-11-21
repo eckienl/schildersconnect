@@ -14,16 +14,16 @@ export const VAT = 0.21;
  * Price of one credit, excl. VAT. Not rounded on purpose: it is the outcome of the cost model in the
  * business plan (marketing per request, support, screening, platform, payment fees, refund reserve, margin).
  */
-export const CREDIT_PRICE_EX = 2.0571;
+export const CREDIT_PRICE_EX = 1.1178;
 
 /** Credits charged per match, by job size (from the customer's budget). */
-export const MATCH_COST = { klein: 6, middel: 16, groot: 32 } as const;
+export const MATCH_COST = { klein: 7, middel: 12, groot: 22 } as const;
 
 /** Bundles, prices in cents excl. VAT. Volume discount: Plus 5%, Pro 10%. */
 export const BUNDLES = [
-  { id: 'start', name: 'Start', credits: 25, priceCents: 5143, discount: '' },
-  { id: 'plus', name: 'Plus', credits: 60, priceCents: 11725, discount: '5% korting' },
-  { id: 'pro', name: 'Pro', credits: 150, priceCents: 27771, discount: '10% korting' },
+  { id: 'start', name: 'Start', credits: 25, priceCents: 2794, discount: '' },
+  { id: 'plus', name: 'Plus', credits: 60, priceCents: 6371, discount: '5% korting' },
+  { id: 'pro', name: 'Pro', credits: 150, priceCents: 15090, discount: '10% korting' },
 ] as const;
 
 /** Euro amount with cents, e.g. 51.43 -> "€ 51,43". */

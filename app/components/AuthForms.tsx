@@ -57,7 +57,7 @@ export function SignupForm({ role, next }: { role: 'particulier' | 'schilder'; n
       <label className="checkbox">
         <input type="checkbox" name="terms" />
         <span>
-          Ik ga akkoord met de voorwaarden en de privacyverklaring.{' '}
+          Ik ga akkoord met de <a href="/voorwaarden" target="_blank">voorwaarden</a> en de <a href="/privacy" target="_blank">privacyverklaring</a>.{' '}
           {role === 'particulier'
             ? 'Mijn contactgegevens worden alleen gedeeld met schilders die ik zelf kies.'
             : 'Mijn gegevens worden gecontroleerd voordat ik opdrachten kan zien.'}

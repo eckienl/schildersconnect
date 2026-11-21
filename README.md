@@ -21,6 +21,13 @@ Het platform voor schilderwerk. Particulieren plaatsen gratis een klus en gescre
    update public.profiles set role = 'admin' where email = 'jij@voorbeeld.nl';
    ```
 
+## Update 2: betalen, meldingen en facturen
+
+- Draai `supabase/002_betalen_meldingen.sql` in de Supabase SQL Editor.
+- **Betalen:** zet `MOLLIE_API_KEY` in Vercel. Een `test_`-sleutel werkt meteen om te testen; voor echte betalingen heb je een `live_`-sleutel nodig. Mollie geeft die na verificatie van je KvK. Zonder sleutel loopt betalen handmatig via de admin.
+- **E-mail:** zet `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `MAIL_FROM` en `ADMIN_EMAIL`. Zonder deze instellingen worden e-mails alleen gelogd.
+- **Facturen:** zet `COMPANY_NAME`, `COMPANY_ADDRESS`, `COMPANY_KVK` en `COMPANY_VAT` zodra de KvK-inschrijving rond is.
+
 ## Zo werkt het
 
 | Rol | Wat | Waar |
@@ -29,7 +36,7 @@ Het platform voor schilderwerk. Particulieren plaatsen gratis een klus en gescre
 | Schilder | Registreren, bedrijfsgegevens invullen, wachten op goedkeuring, gratis reageren, credits kopen, weeklimiet instellen | `/registreren?rol=schilder`, `/schilder` |
 | Admin | Schilders goedkeuren (+25 welkomstcredits), aanvulling vragen of afwijzen, klussen verwijderen, betalingen bevestigen, matches terugboeken | `/admin` |
 
-De bedrijfsregels staan in `lib/config.ts`: matchprijzen (15, 25 of 40 credits), creditbundels, maximaal 3 gekozen schilders en maximaal 8 reacties per klus.
+De bedrijfsregels staan in `lib/config.ts`: matchprijzen (7, 12 of 22 credits à € 1,1178 excl. btw), creditbundels, maximaal 3 gekozen schilders en maximaal 8 reacties per klus.
 
 ## Veiligheid
 

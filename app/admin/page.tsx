@@ -7,7 +7,7 @@ import { adminMenu } from '@/lib/menus';
 import { MATCH_COST, eur } from '@/lib/config';
 import { DashShell } from '@/app/components/DashShell';
 import { Flash } from '@/app/components/Flash';
-import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, removeJob, setMatchCost, setPainterStatus } from './actions';
+import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, rejectReport, removeJob, setMatchCost, setPainterStatus } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -139,6 +139,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                 <td>{p.bundle} · {eur(p.price_eur / 100)} excl. btw ({eur(Math.round(p.price_eur * 1.21) / 100)} incl.) · {p.credits} credits</td>
                 <td><span className={`badge ${p.status === 'paid' ? 'badge-green' : p.status === 'open' ? 'badge-orange' : ''}`}>{p.status}</span></td>
                 <td>
+                  {p.status === 'paid' && <a href={`/factuur/${p.id}`} target="_blank" className="link-arrow">Factuur {p.invoice_number ?? ''}</a>}
                   {p.status === 'open' && (
                     <div className="row">
                       <form action={confirmPurchase}><input type="hidden" name="id" value={p.id} /><button className="btn btn-green btn-sm">Betaald</button></form>
@@ -161,22 +162,34 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
       .in('status', ['chosen', 'refunded'])
       .order('chosen_at', { ascending: false })
       .limit(100);
-    content = !data || data.length === 0 ? <div className="empty">Nog geen matches.</div> : (
+    const rows = (data ?? []).sort((a: any, b: any) => Number(b.report_status === 'open') - Number(a.report_status === 'open'));
+    content = rows.length === 0 ? <div className="empty">Nog geen matches.</div> : (
       <>
-        <p className="small muted">Meldt een schilder dat de klant nep of onbereikbaar is? Controleer het en boek de credits terug.</p>
+        <p className="small muted">Meldingen van schilders staan bovenaan. Controleer ze (bel eventueel de klant) en boek terug of wijs af. De schilder krijgt automatisch bericht.</p>
         <table className="table">
           <thead><tr><th>Datum</th><th>Klus</th><th>Schilder</th><th>Credits</th><th></th></tr></thead>
           <tbody>
-            {data.map((r: any) => (
+            {rows.map((r: any) => (
               <tr key={r.id}>
                 <td>{r.chosen_at ? new Date(r.chosen_at).toLocaleDateString('nl-NL') : '–'}</td>
                 <td>{r.jobs?.title}<div className="small muted">{r.jobs?.city} · {r.jobs?.profiles?.full_name} {r.jobs?.profiles?.phone}</div></td>
                 <td>{r.painters?.company_name}</td>
                 <td>{r.credits_charged}</td>
                 <td>
+                  {r.report_status === 'open' && (
+                    <div className="alert alert-warn" style={{ marginBottom: 8, padding: '8px 10px' }}>
+                      <strong>Melding:</strong> {r.report_reason}{r.report_note ? ` · ${r.report_note}` : ''}
+                    </div>
+                  )}
                   {r.status === 'chosen' ? (
-                    <form action={refundMatch}><input type="hidden" name="id" value={r.id} /><button className="btn btn-ghost btn-sm">Terugboeken</button></form>
+                    <div className="row">
+                      <form action={refundMatch}><input type="hidden" name="id" value={r.id} /><button className="btn btn-ghost btn-sm">Terugboeken</button></form>
+                      {r.report_status === 'open' && (
+                        <form action={rejectReport}><input type="hidden" name="id" value={r.id} /><button className="btn btn-red btn-sm">Melding afwijzen</button></form>
+                      )}
+                    </div>
                   ) : <span className="badge">Teruggeboekt</span>}
+                  {r.report_status === 'afgewezen' && <span className="badge" style={{ marginLeft: 6 }}>Melding afgewezen</span>}
                 </td>
               </tr>
             ))}

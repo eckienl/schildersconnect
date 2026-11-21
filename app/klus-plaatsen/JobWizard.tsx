@@ -337,7 +337,7 @@ export function JobWizard({ loggedIn, defaults = {}, budgetLocked = false }: { l
               </div>
               <label className="checkbox">
                 <input type="checkbox" name="terms" />
-                <span>Ik ga akkoord met de voorwaarden en de privacyverklaring. Ik begrijp dat SchildersConnect bemiddelt en niet kan garanderen dat er schilders reageren of dat de opdracht wordt uitgevoerd.</span>
+                <span>Ik ga akkoord met de <a href="/voorwaarden" target="_blank">voorwaarden</a> en de <a href="/privacy" target="_blank">privacyverklaring</a>. Ik begrijp dat SchildersConnect bemiddelt en niet kan garanderen dat er schilders reageren of dat de opdracht wordt uitgevoerd.</span>
               </label>
               <p className="small muted" style={{ margin: 0 }}>Heb je al een account? <Link href="/inloggen?next=/klus-plaatsen">Log dan eerst in</Link>.</p>
             </div>

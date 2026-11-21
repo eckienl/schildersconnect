@@ -9,7 +9,7 @@ import { DashShell } from '@/app/components/DashShell';
 import { Icon } from '@/app/components/Icon';
 import { painterMenu } from '@/lib/menus';
 import { JobDetails } from '@/app/components/JobDetails';
-import { respond } from '../../actions';
+import { reportMatch, respond } from '../../actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,11 +52,43 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                   <strong>De klant heeft jou gekozen!</strong> Er zijn {mine.credits_charged} credits afgeschreven. Neem contact op met{' '}
                   {job.profiles?.full_name}: <a href={`tel:${job.profiles?.phone}`}>{job.profiles?.phone}</a> ·{' '}
                   <a href={`mailto:${job.profiles?.email}`}>{job.profiles?.email}</a>. Adres: {job.postcode} {job.city}.
-                  <div className="small" style={{ marginTop: 6 }}>Is de klant nep of onbereikbaar, of klopt de opdracht niet met het opgegeven budget? Meld het ons, dan corrigeren of storten we je credits terug.</div>
                 </div>
-              ) : mine.status === 'refunded' ? (
+              ) : null}
+              {mine.status === 'chosen' && (
+                mine.report_status ? (
+                  <div className="alert alert-info" style={{ marginTop: 12 }}>
+                    Je melding ({mine.report_reason}) is {mine.report_status === 'open' ? 'in behandeling' : mine.report_status === 'teruggeboekt' ? 'toegekend: de credits zijn teruggeboekt' : 'beoordeeld en niet toegekend'}.
+                  </div>
+                ) : (
+                  <details style={{ marginTop: 12 }}>
+                    <summary className="link-arrow" style={{ cursor: 'pointer' }}>Probleem met deze match melden</summary>
+                    <form action={reportMatch} className="form" style={{ marginTop: 12 }}>
+                      <input type="hidden" name="response_id" value={mine.id} />
+                      <input type="hidden" name="job_id" value={job.id} />
+                      <div className="field">
+                        <label htmlFor="reason">Wat is er aan de hand?</label>
+                        <select id="reason" name="reason" required defaultValue="">
+                          <option value="" disabled>Kies…</option>
+                          <option>Klant is na 3 pogingen onbereikbaar</option>
+                          <option>Contactgegevens kloppen niet</option>
+                          <option>Nepaanvraag of geen echte opdracht</option>
+                          <option>Opdracht klopt duidelijk niet met het opgegeven budget</option>
+                        </select>
+                      </div>
+                      <div className="field">
+                        <label htmlFor="note">Toelichting</label>
+                        <textarea id="note" name="note" placeholder="Wanneer heb je contact gezocht, wat klopt er niet?" />
+                      </div>
+                      <p className="small muted" style={{ margin: 0 }}>Niet gekozen worden na een offerte is geen reden voor terugboeken: een match is contact, geen gegarandeerde opdracht.</p>
+                      <button className="btn btn-ghost">Melding versturen</button>
+                    </form>
+                  </details>
+                )
+              )}
+              {mine.status === 'refunded' && (
                 <div className="alert alert-info">Deze match is teruggeboekt; de credits staan weer op je account.</div>
-              ) : (
+              )}
+              {mine.status === 'sent' && (
                 <div className="alert alert-info">Wacht op de klant. Je betaalt pas als de klant jou kiest ({job.match_cost} credits).</div>
               )}
             </div>

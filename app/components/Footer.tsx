@@ -22,9 +22,12 @@ export function Footer() {
           <Link href="/registreren?rol=schilder">Aanmelden</Link>
         </div>
         <div>
-          <h4>Bedrijven &amp; VvE</h4>
-          <Link href="/#zakelijk">Zakelijk schilderwerk</Link>
-          <Link href="/klus-plaatsen">Opdracht plaatsen</Link>
+          <h4>SchildersConnect</h4>
+          <Link href="/#zakelijk">Voor bedrijven &amp; VvE</Link>
+          <Link href="/veelgestelde-vragen">Veelgestelde vragen</Link>
+          <Link href="/contact">Contact</Link>
+          <Link href="/voorwaarden">Voorwaarden</Link>
+          <Link href="/privacy">Privacy</Link>
         </div>
       </div>
     </footer>

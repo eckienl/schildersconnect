@@ -320,3 +320,21 @@ body.has-demo { padding-bottom: 76px; }
 /* Full-bleed hero photo */
 @media (min-width: 901px) { .hero-photo { margin-right: calc(-1 * max(24px, (100vw - 1200px) / 2 + 24px)); } }
 @media (max-width: 900px) { .hero-photo { margin: 0 -24px; } }
+
+@media print {
+  .header, .footer, .demobar, .btn { display: none !important; }
+  body { background: #fff; padding: 0 !important; }
+  .card { box-shadow: none; border: 0; }
+}
+
+/* Legal and FAQ pages */
+.legal h2 { font-size: 1.2rem; margin-top: 28px; }
+.legal h2:first-child { margin-top: 0; }
+.legal p, .legal li { color: #2a3650; }
+.legal ol, .legal ul { padding-left: 20px; }
+.faq details { border-bottom: 1px solid var(--line); padding: 14px 0; }
+.faq details:last-child { border-bottom: 0; }
+.faq summary { font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+.faq summary::after { content: '+'; color: var(--orange); font-weight: 800; }
+.faq details[open] summary::after { content: '–'; }
+.faq details p { margin: 10px 0 0; color: var(--muted); }
