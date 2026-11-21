@@ -26,19 +26,27 @@ export default function Page() {
       </ol>
       <h2>3. Voor schilders</h2>
       <ol>
-        <li>Na aanmelding controleert SchildersConnect je gegevens (onder meer KvK, verzekering en portfolio). SchildersConnect mag een aanmelding zonder opgaaf van redenen weigeren of een account beëindigen.</li>
+        <li>Na aanmelding controleert SchildersConnect je gegevens (onder meer KvK, verzekering en portfolio). Wijzen we een aanmelding af, dan laten we je weten waarom.</li>
         <li>Reageren op opdrachten is gratis. Kiest een opdrachtgever jou, dan ontstaat een <strong>match</strong>: jullie krijgen elkaars contactgegevens en er worden credits van je saldo afgeschreven ({SIZE_CLASSES.map((c) => MATCH_COST[c.id]).join(', ')} credits, afhankelijk van de geschatte waarde van de opdracht). De matchprijs zie je voordat je reageert.</li>
         <li>Een match is contact met een opdrachtgever en <strong>geen gegarandeerde opdracht</strong>. Wordt de opdracht na de match niet aan jou gegund, dan worden de credits niet teruggeboekt.</li>
         <li>Credits worden teruggeboekt als de opdrachtgever na drie pogingen onbereikbaar is, de contactgegevens onjuist zijn, de aanvraag nep is, of de opdracht duidelijk niet overeenkomt met het opgegeven budget. Meld dit binnen 14 dagen na de match via je dashboard. SchildersConnect beslist over de melding.</li>
         <li>Je mag vóór een match geen contactgegevens uitwisselen of contact buiten het platform om zoeken. Bij misbruik kan SchildersConnect je account blokkeren en matchkosten in rekening brengen.</li>
+        <li>Reacties op een opdracht ziet de opdrachtgever op volgorde van binnenkomst. SchildersConnect betaalt of rekent niets voor een hogere plek.</li>
+        <li>
+          Schorsen we je account, dan hoor je uiterlijk op het moment van schorsen waarom. Beëindigen we je account,
+          dan melden we dat minstens 30 dagen vooraf met de reden, behalve bij een wettelijke verplichting, fraude of herhaalde
+          overtreding van deze voorwaarden. Je kunt tegen een besluit bezwaar maken door te mailen naar {COMPANY.email}; we
+          reageren binnen 14 dagen.
+        </li>
         <li>Je bent zelf verantwoordelijk voor je offerte, de uitvoering van het werk, je verzekeringen en het naleven van wet- en regelgeving.</li>
       </ol>
       <h2>4. Credits en betaling</h2>
       <ol>
         <li>Credits koop je vooraf in bundels. Alle genoemde prijzen zijn exclusief 21% btw. Je ontvangt een factuur.</li>
         <li>Credits vervallen niet en zijn niet inwisselbaar voor geld, behalve waar de wet dat vereist.</li>
+        <li>Stopt SchildersConnect met het platform, of beëindigen wij je account zonder dat jij iets verkeerd hebt gedaan, dan betalen we de gekochte credits die je nog niet hebt gebruikt terug.</li>
         <li>De eerste {WELCOME_LIMIT} goedgekeurde schilders ontvangen eenmalig {WELCOME_CREDITS} gratis welkomstcredits. Deze zijn niet inwisselbaar voor geld.</li>
-        <li>SchildersConnect mag prijzen aanpassen. Een gewijzigde prijs geldt niet voor credits die je al hebt gekocht; de matchprijs van een opdracht staat vast op het moment dat je reageert.</li>
+        <li>SchildersConnect mag prijzen aanpassen, ook het aantal credits per match. Dat melden we minstens 15 dagen vooraf per e-mail. De matchprijs van een opdracht staat vast op het moment dat je reageert.</li>
       </ol>
       <h2>5. Reviews</h2>
       <p>Reviews moeten eerlijk zijn en gaan over een werkelijk uitgevoerde opdracht. SchildersConnect mag reviews die in strijd zijn met deze regels verwijderen.</p>
@@ -48,8 +56,19 @@ export default function Page() {
         of uit het (tijdelijk) niet beschikbaar zijn van het platform. Aansprakelijkheid is in alle gevallen beperkt tot het
         bedrag dat de schilder in de drie maanden voor de schade aan SchildersConnect heeft betaald.
       </p>
-      <h2>7. Overig</h2>
-      <p>Op deze voorwaarden is Nederlands recht van toepassing. Vragen? Mail naar {COMPANY.email}.</p>
+      <h2>7. Inhoud melden en verwijderen</h2>
+      <p>
+        Zie je een opdracht, reactie, foto of review die in strijd is met de wet of met deze voorwaarden? Meld het via{' '}
+        {COMPANY.email} met een link en een korte uitleg. We bekijken elke melding. Verwijderen of beperken we iets, dan laten
+        we de plaatser weten wat en waarom, en hoe hij bezwaar kan maken.
+      </p>
+      <h2>8. Wijzigingen</h2>
+      <p>Wijzigingen in deze voorwaarden melden we minstens 15 dagen voordat ze ingaan, per e-mail en op deze pagina.</p>
+      <h2>9. Overig</h2>
+      <p>
+        Op deze voorwaarden is Nederlands recht van toepassing. Contactpunt voor gebruikers en autoriteiten: {COMPANY.email}, in
+        het Nederlands of Engels. Klachten beantwoorden we binnen 14 dagen.
+      </p>
     </LegalPage>
   );
 }
