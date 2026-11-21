@@ -11,5 +11,7 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) return NextResponse.redirect(`${origin}${next}`);
   }
-  return NextResponse.redirect(`${origin}/inloggen?fout=link`);
+  // The e-mail is already confirmed by Supabase at this point; the code exchange only fails
+  // when the link is opened on another device than the one used to sign up. Just ask to log in.
+  return NextResponse.redirect(`${origin}/inloggen?m=bevestigd${next !== "/account" ? `&next=${encodeURIComponent(next)}` : ""}`);
 }
