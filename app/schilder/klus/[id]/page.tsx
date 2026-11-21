@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { budgetLabel, euro, sizeForJob } from '@/lib/budget';
+import { budgetLabel, euro, sizeForJob, sizeLabel } from "@/lib/budget";
 import { CREDIT_PRICE_EX, eur, matchPriceEx } from '@/lib/config';
 import { Flash } from '@/app/components/Flash';
 import { DashShell } from '@/app/components/DashShell';
@@ -129,7 +129,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
 function MatchPriceExplainer({ job }: { job: any }) {
   const s = sizeForJob(job);
-  const label = { klein: 'klein (tot € 1.000)', middel: 'middel (€ 1.000 – € 5.000)', groot: 'groot (boven € 5.000)' }[job.size_class as 'klein' | 'middel' | 'groot'];
+  const label = sizeLabel(job.size_class);
   return (
     <div className="card-flat small">
       <strong>Waarom {job.match_cost} credits ({eur(matchPriceEx(job.match_cost))} excl. btw)?</strong>

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CREDIT_PRICE_EX, MATCH_COST, WELCOME_CREDITS, WELCOME_LIMIT, eur, matchPriceEx } from '@/lib/config';
+import { CREDIT_PRICE_EX, WELCOME_CREDITS, WELCOME_LIMIT, eur, matchCostSummary } from '@/lib/config';
 import { LegalPage } from '../components/LegalPage';
 
 export const metadata = { title: 'Veelgestelde vragen – SchildersConnect' };
@@ -12,12 +12,12 @@ const PARTICULIER: [string, string][] = [
   ['Zijn de schilders gecontroleerd?', 'Ja. We controleren elke schilder voordat hij opdrachten ziet: KvK-inschrijving, verzekering en portfolio.'],
 ];
 const SCHILDER: [string, string][] = [
-  ['Wat kost SchildersConnect voor een schilder?', `Aanmelden en reageren is gratis. Je betaalt alleen als een klant jou kiest: ${MATCH_COST.klein} credits (${eur(matchPriceEx(MATCH_COST.klein))}), ${MATCH_COST.middel} credits (${eur(matchPriceEx(MATCH_COST.middel))}) of ${MATCH_COST.groot} credits (${eur(matchPriceEx(MATCH_COST.groot))}) per match, excl. btw, afhankelijk van het budget van de klus.`],
+  ['Wat kost SchildersConnect voor een schilder?', `Aanmelden en reageren is gratis. Je betaalt alleen als een klant jou kiest: ${matchCostSummary().join(', ')}. Alle bedragen per match en excl. btw.`],
   ['Wie bepaalt hoeveel credits een opdracht kost?', 'SchildersConnect, op basis van de opdracht zelf: soort werk, aantal m², binnen of buiten, staat van het huidige schilderwerk en of er een steiger nodig is. Geeft de klant een hoger budget op, dan telt dat. Een laag budget maakt een grote klus dus nooit goedkoop. Bij elke opdracht zie je de prijs in credits en euro\'s, met de uitleg.'],
   ['Wat kost één credit?', `${eur(CREDIT_PRICE_EX)} excl. btw bij de Start-bundel, en minder bij grotere bundels (tot ${eur(15090 / 100 / 150)} bij Pro).`],
   ['Krijg ik mijn credits terug als ik de opdracht niet krijg?', 'Nee. Een match betekent dat je de contactgegevens van de klant krijgt; of je de opdracht krijgt hangt af van je offerte en het gesprek. Credits krijg je wel terug als de klant onbereikbaar of nep is, of als de opdracht duidelijk niet klopt met het opgegeven budget.'],
   ['Hoe betaal ik?', 'Je koopt vooraf een bundel credits met iDEAL. De credits staan direct op je account en je krijgt een factuur met btw. Er is geen abonnement en credits vervallen nooit.'],
-  ['Krijg ik gratis credits?', `De eerste ${WELCOME_LIMIT} goedgekeurde schilders krijgen ${WELCOME_CREDITS} gratis welkomstcredits.`],
+  ['Krijg ik gratis credits?', `De eerste ${WELCOME_LIMIT} goedgekeurde schilders krijgen ${WELCOME_CREDITS} gratis welkomstcredits: genoeg voor één match op een kleine of middelgrote klus.`],
   ['Hoeveel schilders reageren er op een opdracht?', 'Maximaal 8 schilders kunnen reageren, en de klant kiest er maximaal 3. Zo heb je meer kans dan op platforms waar een aanvraag naar veel vakmensen gaat.'],
   ['Mag ik de klant al vóór een match bellen?', 'Nee. Contactgegevens zijn pas na een match zichtbaar, en contact buiten het platform om vóór een match is niet toegestaan.'],
 ];

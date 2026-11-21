@@ -4,7 +4,7 @@ import { getSession } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
 import { budgetLabel } from '@/lib/budget';
 import { adminMenu } from '@/lib/menus';
-import { MATCH_COST, eur } from '@/lib/config';
+import { MATCH_COST, SIZE_CLASSES, eur } from '@/lib/config';
 import { DashShell } from '@/app/components/DashShell';
 import { Flash } from '@/app/components/Flash';
 import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, rejectReport, removeJob, setMatchCost, setPainterStatus } from './actions';
@@ -102,9 +102,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                 <form action={setMatchCost} className="row" style={{ gap: 6, marginTop: 6 }}>
                   <input type="hidden" name="id" value={j.id} />
                   <select name="size" defaultValue={j.size_class} style={{ padding: '6px 8px', width: 'auto' }}>
-                    <option value="klein">Klein · {MATCH_COST.klein} cr</option>
-                    <option value="middel">Middel · {MATCH_COST.middel} cr</option>
-                    <option value="groot">Groot · {MATCH_COST.groot} cr</option>
+                    {SIZE_CLASSES.map((c) => <option key={c.id} value={c.id}>{c.name} · {MATCH_COST[c.id]} cr</option>)}
                   </select>
                   <button className="btn btn-ghost btn-sm">Opslaan</button>
                 </form>

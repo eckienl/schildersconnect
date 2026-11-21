@@ -34,7 +34,7 @@ export async function approvePainter(formData: FormData) {
   }
   const c = await painterContact(id);
   await sendMail(c.email, 'Je aanmelding is goedgekeurd', `Welkom bij SchildersConnect, ${c.company ?? ''}!`,
-    `<p>Je aanmelding is goedgekeurd. Je kunt nu opdrachten bekijken en er gratis op reageren.${welcome ? ` Als een van de eerste 50 schilders hebben we ${WELCOME_CREDITS} gratis credits op je account gezet.` : ''}</p>`,
+    `<p>Je aanmelding is goedgekeurd. Je kunt nu opdrachten bekijken en er gratis op reageren.${welcome ? ` Als een van de eerste ${WELCOME_LIMIT} schilders hebben we ${WELCOME_CREDITS} gratis credits op je account gezet, genoeg voor je eerste match.` : ''}</p>`,
     { label: 'Bekijk opdrachten', url: `${await siteUrl()}/schilder/opdrachten` });
   redirect(welcome ? '/admin?m=goedgekeurd' : '/admin?m=goedgekeurd_zonder_welkom');
 }

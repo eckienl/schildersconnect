@@ -1,19 +1,25 @@
-import { MATCH_COST } from './config';
+import { MATCH_COST, SIZE_CLASSES } from './config';
 
 export type SizeClass = keyof typeof MATCH_COST;
 
 /** Budget options the customer picks from. They also set the match price for painters. */
 export const BUDGETS = [
-  { id: 'klein', label: 'Tot € 1.000', hint: 'Bijv. één kamer, een deur of een paar kozijnen', low: 0, high: 1000, size: 'klein' as SizeClass },
-  { id: 'middel', label: '€ 1.000 – € 5.000', hint: 'Bijv. een verdieping of alle kozijnen buiten', low: 1000, high: 5000, size: 'middel' as SizeClass },
-  { id: 'groot', label: 'Meer dan € 5.000', hint: 'Bijv. een heel huis, bedrijfspand of VvE', low: 5000, high: 0, size: 'groot' as SizeClass },
+  { id: 'klein', label: 'Tot € 500', hint: 'Bijv. één kamer, een deur of een plafond', low: 0, high: 500, size: 'klein' as SizeClass },
+  { id: 'middel', label: '€ 500 – € 2.000', hint: 'Bijv. een paar kamers of een trapgat', low: 500, high: 2000, size: 'middel' as SizeClass },
+  { id: 'groot', label: '€ 2.000 – € 5.000', hint: 'Bijv. een verdieping of alle kozijnen buiten', low: 2000, high: 5000, size: 'groot' as SizeClass },
+  { id: 'extra', label: 'Meer dan € 5.000', hint: 'Bijv. een heel huis, buitengevel, bedrijfspand of VvE', low: 5000, high: 0, size: 'extra' as SizeClass },
   { id: 'onbekend', label: 'Weet ik nog niet', hint: 'De schilder adviseert je', low: 0, high: 0, size: 'middel' as SizeClass },
 ] as const;
 
 export function sizeForAmount(amount: number): SizeClass {
-  if (amount < 1000) return 'klein';
-  if (amount <= 5000) return 'middel';
-  return 'groot';
+  let size: SizeClass = 'klein';
+  for (const c of SIZE_CLASSES) if (amount >= c.from) size = c.id;
+  return size;
+}
+
+export function sizeLabel(size: string) {
+  const c = SIZE_CLASSES.find((x) => x.id === size);
+  return c ? `${c.name.toLowerCase()} (${c.range})` : size;
 }
 
 /**
@@ -28,7 +34,7 @@ export function resolveBudget(budgetId: string, ownAmount: number) {
     const size = sizeForAmount(ownAmount);
     return { low: ownAmount, high: ownAmount, size, matchCost: MATCH_COST[size] };
   }
-  const b = BUDGETS.find((x) => x.id === budgetId) ?? BUDGETS[3];
+  const b = BUDGETS.find((x) => x.id === budgetId) ?? BUDGETS[4];
   return { low: b.low, high: b.high, size: b.size, matchCost: MATCH_COST[b.size] };
 }
 
@@ -78,7 +84,7 @@ export function estimatedValue(job: { job_type: string; surface_m2: number; cond
   return Math.round(value);
 }
 
-const ORDER: SizeClass[] = ['klein', 'middel', 'groot'];
+const ORDER: SizeClass[] = SIZE_CLASSES.map((c) => c.id);
 
 /**
  * Final size class = the higher of (a) the estimate from the job details and (b) the customer's budget.
@@ -89,9 +95,7 @@ export function sizeForJob(job: { job_type: string; surface_m2: number; conditio
   const fromEstimate = sizeForAmount(est);
   let fromBudget: SizeClass = 'klein';
   const { estimate_low: low, estimate_high: high } = job;
-  if (low > 0 && low === high) fromBudget = sizeForAmount(low);
-  else if (high === 0 && low >= 5000) fromBudget = 'groot';
-  else if (low >= 1000) fromBudget = 'middel';
+  if (low > 0) fromBudget = sizeForAmount(low); // own amount or lower bound of the chosen range
   const size = ORDER[Math.max(ORDER.indexOf(fromEstimate), ORDER.indexOf(fromBudget))];
   const basis = ORDER.indexOf(fromBudget) > ORDER.indexOf(fromEstimate) ? 'budget' : 'opdracht';
   return { size, matchCost: MATCH_COST[size], estimate: est, basis: basis as 'budget' | 'opdracht' };

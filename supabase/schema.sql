@@ -53,7 +53,7 @@ create table if not exists public.jobs (
   timing text not null default '',
   estimate_low int not null,
   estimate_high int not null,
-  size_class text not null check (size_class in ('klein', 'middel', 'groot')),
+  size_class text not null check (size_class in ('klein', 'middel', 'groot', 'extra')),
   match_cost int not null,
   photos text[] not null default '{}',
   status text not null default 'open' check (status in ('open', 'closed', 'removed')),
@@ -195,7 +195,7 @@ begin
 end;
 $$;
 
--- Admin approves a painter: +25 welcome credits (only the first time) ----------
+-- Admin approves a painter: +20 welcome credits (only the first time) ----------
 create or replace function public.approve_painter(p_painter uuid)
 returns text language plpgsql security definer set search_path = public as $$
 declare
@@ -208,9 +208,9 @@ begin
   select exists(select 1 from credit_transactions where painter_id = p_painter and reason = 'welkom')
     into v_had_welcome;
   if not v_had_welcome then
-    update painters set credits = credits + 25 where id = p_painter;
+    update painters set credits = credits + 20 where id = p_painter;
     insert into credit_transactions (painter_id, amount, reason, note)
-    values (p_painter, 25, 'welkom', 'Welkomstcredits');
+    values (p_painter, 20, 'welkom', 'Welkomstcredits');
   end if;
   return 'ok';
 end;

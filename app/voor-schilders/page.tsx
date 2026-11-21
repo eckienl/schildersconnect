@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { publicStats } from '@/lib/stats';
-import { MATCH_COST, WELCOME_CREDITS, WELCOME_LIMIT, eur, matchPriceEx } from '@/lib/config';
+import { MATCH_COST, SIZE_CLASSES, WELCOME_CREDITS, WELCOME_LIMIT, eur, matchPriceEx } from '@/lib/config';
 import { welcomeLeft } from '@/lib/stats';
 import { Icon } from '../components/Icon';
 import { Pricing } from '../components/Pricing';
@@ -32,7 +32,7 @@ export default async function Page() {
           <div className="grid grid-4">
             {[
               ['user', 'Aanmelden', 'Account aanmaken en je bedrijfsgegevens invullen: KvK, verzekering, werkgebied.'],
-              ['shield', 'Wij screenen', `Binnen 2 werkdagen gecontroleerd. De eerste ${WELCOME_LIMIT} schilders krijgen ${WELCOME_CREDITS} gratis credits (nog ${left} plekken).`],
+              ['shield', 'Wij screenen', `Binnen 2 werkdagen gecontroleerd. De eerste ${WELCOME_LIMIT} schilders krijgen ${WELCOME_CREDITS} gratis credits, genoeg voor een eerste match (nog ${left} plekken).`],
               ['chat', 'Gratis reageren', 'Reageer op opdrachten met een bericht en prijsindicatie. Zoveel als je wilt.'],
               ['handshake', 'Match', 'Kiest de klant jou? Dan gaan er credits af en krijg je direct zijn contactgegevens.'],
             ].map(([icon, title, text], i) => (
@@ -56,12 +56,8 @@ export default async function Page() {
             aantal m², binnen of buiten, staat van het werk en steiger. Geeft de klant een hoger budget op, dan telt dat. De matchprijs
             zie je bij elke opdracht vóórdat je reageert, in credits én in euro's, met de uitleg erbij.
           </p>
-          <div className="grid grid-3" style={{ maxWidth: 900, margin: '0 auto 36px' }}>
-            {[
-              ['Klein', 'tot € 1.000', MATCH_COST.klein],
-              ['Middel', '€ 1.000 – € 5.000', MATCH_COST.middel],
-              ['Groot', 'boven € 5.000', MATCH_COST.groot],
-            ].map(([name, range, cost]) => (
+          <div className="grid grid-4" style={{ maxWidth: 1100, margin: '0 auto 36px' }}>
+            {SIZE_CLASSES.map((c) => [c.name, c.range, MATCH_COST[c.id]]).map(([name, range, cost]) => (
               <div key={name as string} className="card center">
                 <div className="muted small">{name} · {range}</div>
                 <div style={{ fontSize: '2rem', fontWeight: 800 }}>{cost} credits</div>

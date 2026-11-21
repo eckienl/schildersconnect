@@ -1,5 +1,5 @@
 import { COMPANY } from '@/lib/site';
-import { MATCH_COST, WELCOME_CREDITS, WELCOME_LIMIT } from '@/lib/config';
+import { MATCH_COST, SIZE_CLASSES, WELCOME_CREDITS, WELCOME_LIMIT } from '@/lib/config';
 import { LegalPage } from '../components/LegalPage';
 
 export const metadata = { title: 'Algemene voorwaarden – SchildersConnect' };
@@ -27,7 +27,7 @@ export default function Page() {
       <h2>3. Voor schilders</h2>
       <ol>
         <li>Na aanmelding controleert SchildersConnect je gegevens (onder meer KvK, verzekering en portfolio). SchildersConnect mag een aanmelding zonder opgaaf van redenen weigeren of een account beëindigen.</li>
-        <li>Reageren op opdrachten is gratis. Kiest een opdrachtgever jou, dan ontstaat een <strong>match</strong>: jullie krijgen elkaars contactgegevens en er worden credits van je saldo afgeschreven ({MATCH_COST.klein}, {MATCH_COST.middel} of {MATCH_COST.groot} credits, afhankelijk van het budget van de opdracht). De matchprijs zie je voordat je reageert.</li>
+        <li>Reageren op opdrachten is gratis. Kiest een opdrachtgever jou, dan ontstaat een <strong>match</strong>: jullie krijgen elkaars contactgegevens en er worden credits van je saldo afgeschreven ({SIZE_CLASSES.map((c) => MATCH_COST[c.id]).join(', ')} credits, afhankelijk van de geschatte waarde van de opdracht). De matchprijs zie je voordat je reageert.</li>
         <li>Een match is contact met een opdrachtgever en <strong>geen gegarandeerde opdracht</strong>. Wordt de opdracht na de match niet aan jou gegund, dan worden de credits niet teruggeboekt.</li>
         <li>Credits worden teruggeboekt als de opdrachtgever na drie pogingen onbereikbaar is, de contactgegevens onjuist zijn, de aanvraag nep is, of de opdracht duidelijk niet overeenkomt met het opgegeven budget. Meld dit binnen 14 dagen na de match via je dashboard. SchildersConnect beslist over de melding.</li>
         <li>Je mag vóór een match geen contactgegevens uitwisselen of contact buiten het platform om zoeken. Bij misbruik kan SchildersConnect je account blokkeren en matchkosten in rekening brengen.</li>

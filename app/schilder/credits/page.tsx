@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { BUNDLES, CREDIT_PRICE_EX, MATCH_COST, eur, exVat, inclVat, matchPriceEx } from '@/lib/config';
+import { BUNDLES, CREDIT_PRICE_EX, eur, exVat, inclVat, matchCostSummary } from '@/lib/config';
 import { MOLLIE_ENABLED } from '@/lib/mollie';
 import { painterMenu } from '@/lib/menus';
 import { Flash } from '@/app/components/Flash';
@@ -59,7 +59,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
           ))}
         </div>
         <p className="small muted">
-          Een match kost {MATCH_COST.klein} credits ({eur(matchPriceEx(MATCH_COST.klein))}), {MATCH_COST.middel} credits ({eur(matchPriceEx(MATCH_COST.middel))}) of {MATCH_COST.groot} credits ({eur(matchPriceEx(MATCH_COST.groot))}), excl. btw.
+          Een match kost {matchCostSummary().join(', ')}, excl. btw.
           Een match geeft je contact met de klant; SchildersConnect kan niet garanderen dat je de opdracht krijgt.{' '}
           {MOLLIE_ENABLED ? 'Je betaalt veilig met iDEAL; de credits staan direct na betaling op je account en je factuur staat hieronder.' : 'Na je keuze sturen we een betaalverzoek; na betaling staan de credits op je account.'}
         </p>
