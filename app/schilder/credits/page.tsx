@@ -4,6 +4,7 @@ import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
 import { BUNDLES, CREDIT_PRICE_EX, eur, exVat, inclVat, matchCostSummary } from '@/lib/config';
 import { MOLLIE_ENABLED } from '@/lib/mollie';
+import { syncMolliePayment } from '@/lib/payments';
 import { painterMenu } from '@/lib/menus';
 import { Flash } from '@/app/components/Flash';
 import { DashShell } from '@/app/components/DashShell';
@@ -23,6 +24,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
     client.from('purchases').select('*').eq('painter_id', painter.id).order('created_at', { ascending: false }).limit(30),
   ]);
   const returned = betaling ? (purchases ?? []).find((p: any) => p.id === betaling) : null;
+  // Back from the payment page before Mollie's webhook arrived: ask Mollie directly, so the credits show up right away.
+  if (returned && returned.status === 'open' && returned.mollie_payment_id) {
+    const status = await syncMolliePayment(returned.mollie_payment_id).catch(() => 'unknown');
+    if (status === 'paid' || status === 'cancelled') redirect(`/schilder/credits?betaling=${returned.id}`);
+  }
   const open = (purchases ?? []).filter((p: any) => p.status === 'open' && p.method !== 'ideal');
   const invoices = (purchases ?? []).filter((p: any) => p.status === 'paid');
 
