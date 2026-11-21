@@ -50,3 +50,12 @@ export async function refundMatch(formData: FormData) {
   const { data } = await db().rpc('refund_response', { p_response: clean(formData.get('id'), 64) });
   redirect(`/admin?tab=matches&m=${data === 'ok' ? 'teruggeboekt' : 'fout'}`);
 }
+
+export async function setMatchCost(formData: FormData) {
+  await requireAdmin();
+  const size = clean(formData.get('size'), 10);
+  const costs: Record<string, number> = { klein: 15, middel: 25, groot: 40 };
+  if (!(size in costs)) redirect('/admin?tab=klussen&m=fout');
+  await db().from('jobs').update({ size_class: size, match_cost: costs[size] }).eq('id', clean(formData.get('id'), 64));
+  redirect('/admin?tab=klussen&m=prijs_aangepast');
+}

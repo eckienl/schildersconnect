@@ -2,8 +2,11 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { euro } from '@/lib/estimate';
+import { budgetLabel } from '@/lib/budget';
 import { Flash } from '@/app/components/Flash';
+import { DashShell } from '@/app/components/DashShell';
+import { Icon } from '@/app/components/Icon';
+import { painterMenu } from '@/lib/menus';
 import { JobDetails } from '@/app/components/JobDetails';
 import { respond } from '../../actions';
 
@@ -21,17 +24,17 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const enough = painter.credits >= job.match_cost;
 
   return (
-    <div className="dash">
-      <div className="container" style={{ maxWidth: 860 }}>
-        <Link href="/schilder" className="small muted">← Beschikbare klussen</Link>
-        <div className="dash-head" style={{ marginTop: 8 }}>
+    <DashShell title="Schildersaccount" icon="roller" menu={await painterMenu(painter)} active="/schilder/opdrachten">
+        <Link href="/schilder/opdrachten" className="back"><Icon name="back" size={16} /> Beschikbare opdrachten</Link>
+        <div className="dash-head">
           <div>
             <h1>{job.title}</h1>
             <div className="meta"><span>{job.city}</span><span>Geplaatst {new Date(job.created_at).toLocaleDateString('nl-NL')}</span></div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div className="small muted">Richtprijs klant</div>
-            <strong>{euro(job.estimate_low)} – {euro(job.estimate_high)}</strong>
+            <div className="small muted">{budgetLabel(job).startsWith('Richtprijs') ? 'Richtprijs klant' : 'Budget klant'}</div>
+            <strong>{budgetLabel(job).replace(/^(Budget|Richtprijs klant): /, '')}</strong>
+            <div className="small muted">Matchprijs: {job.match_cost} credits</div>
           </div>
         </div>
         <div className="stack">
@@ -48,7 +51,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                   <strong>De klant heeft jou gekozen!</strong> Er zijn {mine.credits_charged} credits afgeschreven. Neem contact op met{' '}
                   {job.profiles?.full_name}: <a href={`tel:${job.profiles?.phone}`}>{job.profiles?.phone}</a> ·{' '}
                   <a href={`mailto:${job.profiles?.email}`}>{job.profiles?.email}</a>. Adres: {job.postcode} {job.city}.
-                  <div className="small" style={{ marginTop: 6 }}>Is de klant nep of onbereikbaar? Mail ons, dan boeken we je credits terug.</div>
+                  <div className="small" style={{ marginTop: 6 }}>Is de klant nep of onbereikbaar, of klopt de opdracht niet met het opgegeven budget? Meld het ons, dan corrigeren of storten we je credits terug.</div>
                 </div>
               ) : mine.status === 'refunded' ? (
                 <div className="alert alert-info">Deze match is teruggeboekt; de credits staan weer op je account.</div>
@@ -86,7 +89,6 @@ export default async function Page({ params, searchParams }: { params: Promise<{
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </DashShell>
   );
 }

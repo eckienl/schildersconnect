@@ -1,4 +1,5 @@
 import { shortPostcode } from '@/lib/sanitize';
+import { budgetLabel } from '@/lib/budget';
 
 export function JobDetails({ job, showFullPostcode = false }: { job: any; showFullPostcode?: boolean }) {
   return (
@@ -11,6 +12,7 @@ export function JobDetails({ job, showFullPostcode = false }: { job: any; showFu
         <dt>Huidige staat</dt><dd>{job.condition || '–'}</dd>
         {job.location_type !== 'binnen' && (<><dt>Steiger nodig</dt><dd>{job.scaffold_needed}</dd></>)}
         <dt>Planning</dt><dd>{job.timing || '–'}</dd>
+        <dt>Budget</dt><dd>{budgetLabel(job).replace(/^Budget: /, '')}</dd>
         <dt>Locatie</dt><dd>{showFullPostcode ? job.postcode : `${shortPostcode(job.postcode)}..`} {job.city}</dd>
       </dl>
       {job.description && <p style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{job.description}</p>}

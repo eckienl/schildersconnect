@@ -1,11 +1,12 @@
 import { requireProfile } from '@/lib/session';
 import { PainterForm } from './PainterForm';
+import { DashShell } from '@/app/components/DashShell';
+import { painterMenu } from '@/lib/menus';
 
 export default async function Page() {
   const { painter } = await requireProfile('/schilder/aanmelden', 'schilder');
   return (
-    <div className="section">
-      <div className="container" style={{ maxWidth: 760 }}>
+    <DashShell title="Schildersaccount" icon="roller" menu={await painterMenu(painter)} active="/schilder/aanmelden">
         {!painter && <span className="badge badge-orange">Stap 2 van 2</span>}
         <h1 style={{ fontSize: '1.9rem', marginTop: 10 }}>{painter ? 'Bedrijfsprofiel' : 'Je bedrijfsgegevens'}</h1>
         <p className="muted">
@@ -19,7 +20,6 @@ export default async function Page() {
         <div className="card" style={{ marginTop: 20 }}>
           <PainterForm painter={painter} />
         </div>
-      </div>
-    </div>
+    </DashShell>
   );
 }

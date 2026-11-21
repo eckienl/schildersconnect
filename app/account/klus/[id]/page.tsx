@@ -2,7 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { euro } from '@/lib/estimate';
+import { budgetLabel } from '@/lib/budget';
+import { customerMenu } from '@/lib/menus';
+import { DashShell } from '@/app/components/DashShell';
+import { Icon } from '@/app/components/Icon';
 import { MAX_CHOSEN_PER_JOB } from '@/lib/config';
 import { Flash } from '@/app/components/Flash';
 import { JobDetails } from '@/app/components/JobDetails';
@@ -28,19 +31,21 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   const canChoose = job.status === 'open' && chosenCount < MAX_CHOSEN_PER_JOB;
 
   return (
-    <div className="dash">
-      <div className="container narrow" style={{ maxWidth: 860 }}>
-        <Link href="/account" className="small muted">← Mijn klussen</Link>
-        <div className="dash-head" style={{ marginTop: 8 }}>
+    <DashShell title="Mijn account" icon="user" menu={await customerMenu(profile)} active="/account">
+        <Link href="/account" className="back"><Icon name="back" size={16} /> Mijn opdrachten</Link>
+        <div className="dash-head">
           <div>
             <h1>{job.title}</h1>
-            <div className="meta"><span>{job.city}</span><span>Richtprijs {euro(job.estimate_low)} – {euro(job.estimate_high)}</span></div>
+            <div className="meta"><span>{job.city}</span><span>{budgetLabel(job)}</span></div>
           </div>
           {job.status === 'open' ? (
-            <form action={closeJob}>
-              <input type="hidden" name="job_id" value={job.id} />
-              <button className="btn btn-ghost btn-sm">Klus sluiten</button>
-            </form>
+            <div className="row">
+              <Link href={`/account/klus/${job.id}/bewerken`} className="btn btn-sm"><Icon name="edit" size={16} /> Bewerken</Link>
+              <form action={closeJob}>
+                <input type="hidden" name="job_id" value={job.id} />
+                <button className="btn btn-ghost btn-sm">Opdracht sluiten</button>
+              </form>
+            </div>
           ) : (
             <span className="badge">Gesloten</span>
           )}
@@ -59,7 +64,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
 
           {!responses || responses.length === 0 ? (
             <div className="empty">
-              Nog geen reacties. Gescreende schilders in de buurt van {job.city} zien je klus nu. Meestal komen de eerste reacties binnen 1–2 dagen.
+              Nog geen reacties. Gescreende schilders in de buurt van {job.city} zien je opdracht nu. Meestal komen de eerste reacties binnen 24 uur.
             </div>
           ) : (
             responses.map((r: any) => {
@@ -109,12 +114,14 @@ export default async function Page({ params, searchParams }: { params: Promise<{
             })
           )}
 
-          <h2 style={{ fontSize: '1.2rem', marginTop: 32 }}>Je aanvraag</h2>
+          <div className="row between" style={{ marginTop: 32 }}>
+            <h2 style={{ fontSize: '1.2rem', margin: 0 }}>Je aanvraag</h2>
+            {job.status === 'open' && <Link href={`/account/klus/${job.id}/bewerken`} className="link-arrow"><Icon name="edit" size={16} /> Aanvraag bewerken</Link>}
+          </div>
           <div className="card">
             <JobDetails job={job} showFullPostcode />
           </div>
         </div>
-      </div>
-    </div>
+    </DashShell>
   );
 }

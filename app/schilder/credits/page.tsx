@@ -3,8 +3,11 @@ import { redirect } from 'next/navigation';
 import { requireProfile } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
 import { BUNDLES, MATCH_COST } from '@/lib/config';
-import { euro } from '@/lib/estimate';
+import { euro } from '@/lib/budget';
 import { Flash } from '@/app/components/Flash';
+import { DashShell } from '@/app/components/DashShell';
+import { Icon } from '@/app/components/Icon';
+import { painterMenu } from '@/lib/menus';
 import { requestBundle, saveWeeklyLimit } from '../actions';
 
 export const dynamic = 'force-dynamic';
@@ -22,10 +25,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
   ]);
 
   return (
-    <div className="dash">
-      <div className="container" style={{ maxWidth: 900 }}>
-        <Link href="/schilder" className="small muted">← Dashboard</Link>
-        <div className="dash-head" style={{ marginTop: 8 }}>
+    <DashShell title="Schildersaccount" icon="roller" menu={await painterMenu(painter)} active="/schilder/credits">
+        
+        <div className="dash-head">
           <div>
             <h1>Credits</h1>
             <p className="muted" style={{ margin: 0 }}>Geen abonnement. Credits vervallen nooit. 1 credit = € 1.</p>
@@ -84,7 +86,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
             </table>
           )}
         </div>
-      </div>
-    </div>
+    </DashShell>
   );
 }

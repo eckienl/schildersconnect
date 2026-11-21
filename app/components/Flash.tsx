@@ -3,7 +3,7 @@ const MESSAGES: Record<string, { type: 'error' | 'success' | 'info'; text: strin
   opgeslagen: { type: 'success', text: 'Opgeslagen.' },
   fout: { type: 'error', text: 'Er ging iets mis. Probeer het opnieuw.' },
   // customer
-  klus_geplaatst: { type: 'success', text: 'Je klus staat online. Gescreende schilders kunnen nu reageren; je krijgt hun reacties hier te zien.' },
+  klus_geplaatst: { type: 'success', text: 'Je opdracht staat online. Gescreende schilders kunnen nu reageren; meestal binnen 24 uur. Je ziet hun reacties hier.' },
   ok: { type: 'success', text: 'Gelukt! Je ziet nu de contactgegevens van deze schilder; hij heeft die van jou ook ontvangen.' },
   al_gekozen: { type: 'info', text: 'Deze schilder had je al gekozen.' },
   maximum_bereikt: { type: 'error', text: 'Je hebt al 3 schilders gekozen voor deze klus.' },
@@ -18,6 +18,11 @@ const MESSAGES: Record<string, { type: 'error' | 'success' | 'info'; text: strin
   vol: { type: 'error', text: 'Op deze klus is al het maximum aantal reacties gegeven.' },
   al_gereageerd: { type: 'info', text: 'Je hebt al op deze klus gereageerd.' },
   aankoop_aangevraagd: { type: 'success', text: 'Je aanvraag is ontvangen. Je ontvangt een betaalverzoek; na betaling staan de credits direct op je account.' },
+  // demo
+  demo_reset: { type: 'success', text: 'De demodata is teruggezet naar het begin.' },
+  demo_fout: { type: 'error', text: 'Inloggen op het demo-account lukte niet. Probeer het opnieuw.' },
+  bijgewerkt: { type: 'success', text: 'Je aanvraag is bijgewerkt.' },
+  prijs_aangepast: { type: 'success', text: 'Matchprijs aangepast.' },
   // admin
   goedgekeurd: { type: 'success', text: 'Schilder goedgekeurd en 25 welkomstcredits bijgeschreven.' },
   teruggeboekt: { type: 'success', text: 'Match teruggeboekt.' },

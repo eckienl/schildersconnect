@@ -2,9 +2,11 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/session';
 import { db } from '@/lib/supabase/admin';
-import { euro } from '@/lib/estimate';
+import { budgetLabel } from '@/lib/budget';
+import { adminMenu } from '@/lib/menus';
+import { DashShell } from '@/app/components/DashShell';
 import { Flash } from '@/app/components/Flash';
-import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, removeJob, setPainterStatus } from './actions';
+import { approvePainter, cancelPurchase, confirmPurchase, refundMatch, removeJob, setMatchCost, setPainterStatus } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,13 +90,24 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
       .limit(100);
     content = !data || data.length === 0 ? <div className="empty">Nog geen klussen.</div> : (
       <table className="table">
-        <thead><tr><th>Klus</th><th>Klant</th><th>Grootte</th><th>Reacties</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>Opdracht</th><th>Klant</th><th>Budget en matchprijs</th><th>Reacties</th><th>Status</th><th></th></tr></thead>
         <tbody>
           {data.map((j: any) => (
             <tr key={j.id}>
               <td><strong>{j.title}</strong><div className="small muted">{j.postcode} {j.city} · {j.job_type} · {j.surface_m2} m²</div></td>
               <td>{j.profiles?.full_name}<div className="small muted">{j.profiles?.email}</div></td>
-              <td>{j.size_class} · {j.match_cost} cr<div className="small muted">{euro(j.estimate_low)}–{euro(j.estimate_high)}</div></td>
+              <td>
+                <div className="small">{budgetLabel(j)}</div>
+                <form action={setMatchCost} className="row" style={{ gap: 6, marginTop: 6 }}>
+                  <input type="hidden" name="id" value={j.id} />
+                  <select name="size" defaultValue={j.size_class} style={{ padding: '6px 8px', width: 'auto' }}>
+                    <option value="klein">Klein · 15 cr</option>
+                    <option value="middel">Middel · 25 cr</option>
+                    <option value="groot">Groot · 40 cr</option>
+                  </select>
+                  <button className="btn btn-ghost btn-sm">Opslaan</button>
+                </form>
+              </td>
               <td>{j.responses?.length ?? 0} ({j.responses?.filter((r: any) => r.status === 'chosen').length ?? 0} gekozen)</td>
               <td><span className="badge">{j.status}</span></td>
               <td>
@@ -122,7 +135,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
               <tr key={p.id}>
                 <td>{new Date(p.created_at).toLocaleDateString('nl-NL')}</td>
                 <td>{p.painters?.company_name}<div className="small muted">{p.painters?.profiles?.email}</div></td>
-                <td>{p.bundle} · {euro(p.price_eur)} · {p.credits} credits</td>
+                <td>{p.bundle} · € {p.price_eur} · {p.credits} credits</td>
                 <td><span className={`badge ${p.status === 'paid' ? 'badge-green' : p.status === 'open' ? 'badge-orange' : ''}`}>{p.status}</span></td>
                 <td>
                   {p.status === 'open' && (
@@ -173,26 +186,19 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
   }
 
   return (
-    <div className="dash">
-      <div className="container">
-        <div className="dash-head">
-          <div><div className="muted small">Beheer</div><h1>SchildersConnect admin</h1></div>
-        </div>
-        <div className="stack">
-          <Flash code={sp.m} />
-          <div className="grid grid-3">
-            <div className="stat"><div className="num">{pendingCount ?? 0}</div><div className="lbl">Schilders wachten op controle</div></div>
-            <div className="stat"><div className="num">{openJobs ?? 0}</div><div className="lbl">Open klussen</div></div>
-            <div className="stat"><div className="num">{openPurchases ?? 0}</div><div className="lbl">Openstaande aankopen</div></div>
-          </div>
-          <div className="tabs" style={{ marginTop: 16 }}>
-            {[['schilders', 'Schilders'], ['klussen', 'Klussen'], ['aankopen', 'Aankopen'], ['matches', 'Matches']].map(([k, label]) => (
-              <Link key={k} href={`/admin?tab=${k}`} className={tab === k ? 'active' : ''}>{label}</Link>
-            ))}
-          </div>
-          {content}
-        </div>
+    <DashShell title="Beheer" icon="shield" menu={await adminMenu()} active={tab === 'schilders' ? '/admin' : `/admin?tab=${tab}`}>
+      <div className="dash-head">
+        <div><div className="muted small">Beheer</div><h1>SchildersConnect admin</h1></div>
       </div>
-    </div>
+      <div className="stack">
+        <Flash code={sp.m} />
+        <div className="grid grid-3">
+          <div className="stat"><div className="num">{pendingCount ?? 0}</div><div className="lbl">Schilders wachten op controle</div></div>
+          <div className="stat"><div className="num">{openJobs ?? 0}</div><div className="lbl">Open opdrachten</div></div>
+          <div className="stat"><div className="num">{openPurchases ?? 0}</div><div className="lbl">Openstaande aankopen</div></div>
+        </div>
+        <div className="table-wrap">{content}</div>
+      </div>
+    </DashShell>
   );
 }
