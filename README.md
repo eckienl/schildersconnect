@@ -34,7 +34,7 @@ Het platform voor schilderwerk. Particulieren plaatsen gratis een klus en gescre
 | --- | --- | --- |
 | Particulier | Account aanmaken, klus plaatsen met richtprijs, reacties vergelijken, maximaal 3 schilders kiezen | `/klus-plaatsen`, `/account` |
 | Schilder | Registreren, bedrijfsgegevens invullen, wachten op goedkeuring, gratis reageren, credits kopen, weeklimiet instellen | `/registreren?rol=schilder`, `/schilder` |
-| Admin | Schilders goedkeuren (+25 welkomstcredits), aanvulling vragen of afwijzen, klussen verwijderen, betalingen bevestigen, matches terugboeken | `/admin` |
+| Admin | Schilders goedkeuren (+20 welkomstcredits voor de eerste 50), aanvulling vragen of afwijzen, klussen verwijderen, betalingen bevestigen, matches terugboeken | `/admin` |
 
 De bedrijfsregels staan in `lib/config.ts`: matchprijzen (7, 12 of 22 credits à € 1,1178 excl. btw), creditbundels, maximaal 3 gekozen schilders en maximaal 8 reacties per klus.
 
