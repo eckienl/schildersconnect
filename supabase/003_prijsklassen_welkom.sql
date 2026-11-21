@@ -26,3 +26,4 @@ begin
 end;
 $$;
 revoke execute on function public.approve_painter(uuid) from public, anon, authenticated;
+grant execute on function public.approve_painter(uuid) to service_role;
