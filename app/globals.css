@@ -244,7 +244,7 @@ textarea { min-height: 120px; resize: vertical; }
 
 /* ---------- Dashboard ---------- */
 .dash { padding: 32px 0 72px; }
-.dash-grid { display: grid; grid-template-columns: 270px 1fr; gap: 28px; align-items: start; }
+.dash-grid { display: grid; grid-template-columns: 290px 1fr; gap: 28px; align-items: start; }
 .dash-main { min-width: 0; }
 .side { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); position: sticky; top: 100px; }
 .side-head { background: var(--navy); color: var(--white); padding: 16px 18px; display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.15rem; }
@@ -316,3 +316,7 @@ table.table { width: 100%; border-collapse: collapse; background: var(--white); 
 .demobar .demobar-reset { background: transparent; color: rgba(255,255,255,0.7); text-decoration: underline; }
 .demobar-credits { background: var(--green); padding: 5px 9px; border-radius: 8px; font-weight: 800; white-space: nowrap; }
 body.has-demo { padding-bottom: 76px; }
+
+/* Full-bleed hero photo */
+@media (min-width: 901px) { .hero-photo { margin-right: calc(-1 * max(24px, (100vw - 1200px) / 2 + 24px)); } }
+@media (max-width: 900px) { .hero-photo { margin: 0 -24px; } }

@@ -28,7 +28,7 @@ export async function Header() {
                 <Icon name="user" size={16} /> <span className="hide-xs">{profile.full_name.split(' ')[0] || 'Mijn account'}</span>
               </Link>
               <form action={signOut}>
-                <button className="btn btn-sm" type="submit" title="Uitloggen"><Icon name="logout" size={16} /><span className="hide-xs">Uitloggen</span></button>
+                <button className="btn btn-sm btn-outline-light" type="submit" title="Uitloggen"><Icon name="logout" size={16} /><span className="hide-xs">Uitloggen</span></button>
               </form>
             </>
           ) : (
