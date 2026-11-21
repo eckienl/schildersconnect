@@ -97,7 +97,7 @@ export async function ensureDemo(reset = false) {
   const ids = {} as Record<DemoRole, string>;
   for (const key of Object.keys(DEMO_USERS) as DemoRole[]) ids[key] = await ensureUser(key);
 
-  await client.from('painters').upsert([
+  const { error: painterError } = await client.from('painters').upsert([
     {
       id: ids.schilder,
       company_name: 'Van Dijk Schilderwerken',
@@ -110,6 +110,7 @@ export async function ensureDemo(reset = false) {
       description: 'Al 15 jaar schildersbedrijf in de regio Utrecht. Binnen- en buitenschilderwerk, houtrotherstel en latex spuiten. 5 jaar garantie op buitenwerk.',
       specialties: ['Binnenschilderwerk', 'Buitenschilderwerk', 'Houtrot herstel'],
       status: 'approved',
+      admin_note: '',
       approved_at: new Date().toISOString(),
     },
     {
@@ -125,8 +126,10 @@ export async function ensureDemo(reset = false) {
       specialties: ['Binnenschilderwerk', 'Latex spuiten'],
       status: 'pending',
       admin_note: '',
+      approved_at: null,
     },
   ]);
+  if (painterError) throw new Error('Demo-schilders aanmaken mislukt: ' + painterError.message);
 
   const { count } = await client.from('jobs').select('id', { count: 'exact', head: true }).eq('customer_id', ids.particulier);
   if (reset || !count) {
